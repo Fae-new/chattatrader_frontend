@@ -51,7 +51,7 @@ export default function History() {
   }, []);
 
   return (
-    <div className='p-6 bg-gray-50 min-h-screen'>
+    <div className='p-6 bg-gray-50 min-h-screen backdrop-blur-md'>
       {/* Header */}
       <div className='mb-6 mt-3 lg:mt-0'>
         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6'>
