@@ -299,7 +299,7 @@ export default function ChatPage() {
       >
         <FaComments size={20} />
       </button>
-      <div className='flex h-screen overflow-hidden'>
+      <div className='flex min-h-screen overflow-hidden'>
         {/* Chat Area - Left */}
         <div className='flex-1 flex flex-col bg-white/20 backdrop-blur-md p-2 sm:p-2 md:p-2'>
           {/* Mobile toggle button for chats panel */}

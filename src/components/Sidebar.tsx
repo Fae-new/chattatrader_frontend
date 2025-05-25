@@ -47,7 +47,7 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className={`w-64 h-screen fixed md:relative z-40 p-4 flex flex-col justify-between
+        className={`w-64 min-h-screen fixed md:relative z-40 p-4 flex flex-col justify-between
     bg-white/10 backdrop-blur-lg rounded-r-xl shadow-lg transition-all duration-300 ease-in-out
     ${isOpen ? 'left-0' : '-left-64 md:left-0'}`}
       >
