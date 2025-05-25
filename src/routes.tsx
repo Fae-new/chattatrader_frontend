@@ -11,6 +11,7 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 const ComingSoon = lazy(() => import('./pages/ComingSoon/ComingSoon'));
 const Signup = lazy(() => import('./pages/Signup/Signup'));
 const VerifyOtp = lazy(() => import('./pages/VerifyOtp/VerifyOtp'));
+const History = lazy(() => import('./pages/History/History'));
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/about', element: <About /> },
       { path: '/chat', element: <Chat /> },
+      { path: '/history', element: <History /> },
       { path: '/soon', element: <ComingSoon /> },
     ],
   },

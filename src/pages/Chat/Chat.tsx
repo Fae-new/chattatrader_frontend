@@ -294,18 +294,18 @@ export default function ChatPage() {
   return (
     <>
       <button
-        className='md:hidden top-2 right-2 mb-4 fixed p-2 bg-[#007b83] text-white rounded hover:bg-cyan-700 z-10'
+        className='lg:hidden top-2 right-2 mb-4 fixed p-2 bg-[#007b83] text-white rounded hover:bg-cyan-700 z-10'
         onClick={() => setIsChatsOpen(!isChatsOpen)}
       >
         <FaComments size={20} />
       </button>
-      <div className='flex h-screen w-screen overflow-hidden'>
+      <div className='flex h-screen overflow-hidden'>
         {/* Chat Area - Left */}
         <div className='flex-1 flex flex-col bg-white/20 backdrop-blur-md p-2 sm:p-2 md:p-2'>
           {/* Mobile toggle button for chats panel */}
 
           {/* Chat Session Title */}
-          <div className='sticky top-5 z-10 bg-white border-b border-gray-300 py-2 md:py-4 pb-3'>
+          <div className='sticky top-5 z-10 bg-white border-b border-gray-300 pb-3'>
             <h2 className='text-lg md:text-xl font-bold text-gray-900 text-center'>
               {currentChat.title}
             </h2>
@@ -401,12 +401,12 @@ export default function ChatPage() {
           className={`
           fixed top-0 right-0 z-50 h-full w-64 sm:w-72 bg-white/30 backdrop-blur-md p-4 border-l border-gray-200 flex flex-col
           transform transition-transform duration-300 ease-in-out
-          md:relative md:translate-x-0
-          ${isChatsOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
+          lg:relative lg:translate-x-0
+          ${isChatsOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
         `}
         >
           <button
-            className='md:hidden self-end mb-4 p-2 bg-cyan-600 text-white rounded hover:bg-cyan-700'
+            className='lg:hidden self-end mb-4 p-2 bg-cyan-600 text-white rounded hover:bg-cyan-700'
             onClick={() => setIsChatsOpen(false)}
           >
             <FaTimes />

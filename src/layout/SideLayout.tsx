@@ -2,9 +2,21 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 
 const SidebarLayout = () => (
-  <div className='flex'>
-    <Sidebar />
-    <Outlet />
+  <div className='flex h-screen'>
+    {/* Desktop sidebar container - only takes space on md+ screens */}
+    <div className='hidden md:block md:w-64'>
+      <Sidebar />
+    </div>
+
+    {/* Mobile sidebar - positioned absolutely, doesn't take layout space */}
+    <div className='md:hidden'>
+      <Sidebar />
+    </div>
+
+    {/* Main content area */}
+    <div className='flex-1 overflow-y-auto'>
+      <Outlet />
+    </div>
   </div>
 );
 
