@@ -352,7 +352,9 @@ export default function ChatPage() {
                 className='w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-0 focus:border-gray-300 text-sm'
                 placeholder='Type your message...'
                 value={input}
-                onChange={(e: any) => setInput(e.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setInput(e.target.value)
+                }
                 onKeyDown={(e) =>
                   e.key === 'Enter' && sendMessage(input, 'text')
                 }
