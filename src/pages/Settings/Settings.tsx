@@ -92,9 +92,9 @@ const Settings = () => {
         />
         {/* 2FA Section */}
         <div className='w-full lg:w-1/2 bg-white p-6 rounded-xl shadow-sm'>
-          <div className='flex items-center gap-3 mb-6'>
-            <h2 className='text-lg font-semibold text-gray-800'>
-              Two-Factor Authentication
+          <div className='flex flex-wrap items-center gap-3 mb-6'>
+            <h2 className='text-base sm:text-xl font-semibold text-gray-800 min-w-0'>
+              Two-Factor Auth
             </h2>
             <span className='px-2 py-1 text-xs font-medium bg-orange-100 text-orange-800 rounded-full'>
               Coming Soon
@@ -119,14 +119,15 @@ const Settings = () => {
 
       {/* Social Section */}
       <div className='bg-white p-6 rounded-xl shadow-sm'>
-        <div className='flex items-center gap-3 mb-6'>
-          <h2 className='text-lg font-semibold text-gray-800'>
+        <div className='flex flex-wrap items-center gap-3 mb-6'>
+          <h2 className='text-base sm:text-xl font-semibold text-gray-800 min-w-0'>
             Social Connections
           </h2>
           <span className='px-2 py-1 text-xs font-medium bg-orange-100 text-orange-800 rounded-full'>
             Coming Soon
           </span>
         </div>
+
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
           {SOCIAL_CONNECTIONS.map((social, index) => (
             <div
