@@ -12,7 +12,9 @@ const ComingSoon = lazy(() => import('./pages/ComingSoon/ComingSoon'));
 const Signup = lazy(() => import('./pages/Signup/Signup'));
 const VerifyOtp = lazy(() => import('./pages/VerifyOtp/VerifyOtp'));
 const History = lazy(() => import('./pages/History/History'));
+const Discovery = lazy(() => import("./pages/discovery/discovery"))
 const Settings = lazy(() => import('./pages/Settings/Settings'));
+
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +32,7 @@ export const router = createBrowserRouter([
       { path: '/history', element: <History /> },
       { path: '/settings', element: <Settings /> },
       { path: '/soon', element: <ComingSoon /> },
+      { path: '/discover', element: <Discovery /> } 
     ],
   },
   {
