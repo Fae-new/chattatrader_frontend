@@ -70,7 +70,7 @@ const Settings = () => {
   );
 
   return (
-    <div className='w-full max-w-4xl mx-auto p-4 sm:p-6 mt-6 md:mt-0'>
+    <div className='w-full max-w-4xl mx-auto p-4 sm:p-6'>
       <h1 className='text-2xl font-bold text-gray-800 mb-4 md:mb-8 text-center'>
         Account Settings
       </h1>
