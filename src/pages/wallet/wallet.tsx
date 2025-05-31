@@ -50,6 +50,7 @@ const Wallet: React.FC = () => {
   // State
   const [selectedChain, setSelectedChain] = useState<Network['value'] | 'all'>('sol');
   const [showBalance, setShowBalance] = useState(false);
+  const [showBalanceNumbers, setShowBalanceNumbers] = useState(true);
   const [tokens, setTokens] = useState<Token[]>(initialTokens);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
@@ -61,6 +62,12 @@ const Wallet: React.FC = () => {
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null);
   const [loadingToken, setLoadingToken] = useState(false);
   const [copiedText, setCopiedText] = useState<string | null>(null);
+
+  const walletAddress = "0x1234567890abcdef";
+  const truncateString= (str: string, startLength: number = 5, endLength: number = 4) => {
+  return `${str.slice(0, startLength)}...${str.slice(-endLength)}`;
+};
+
 
   useEffect(() => {
     if (!contractAddress) {
@@ -222,12 +229,12 @@ const Wallet: React.FC = () => {
                 <h2 className="text-[18px] sm:text-[20px] md:text-[24px] font-medium text-white truncate max-w-[160px] sm:max-w-[200px]">
                   Chattatrader Balance 
                 </h2>
-                <Button 
-                  onClick={() => setShowBalance(!showBalance)}
-                  className="p-2 rounded-full bg-white transition"
-                >
-                  { showBalance ? <Eye /> : <EyeOff /> }
-                </Button>
+                <button 
+                  onClick={() => setShowBalanceNumbers(!showBalanceNumbers)}
+                  className="p-2 rounded-full bg-white hover:bg-gray-100 transition"
+                  aria-label="Togge balance visibility">
+                  {showBalanceNumbers ? <Eye /> : <EyeOff />}
+                </button>
               </div>
               <div className="flex items-center gap-4 text-right text-[#FFFFFF99] ml-auto">
                 <div>
@@ -265,44 +272,59 @@ const Wallet: React.FC = () => {
                 </Tabs>
 
                 {/* Balance Details */}
-                <AnimatePresence>
-                  {showBalance && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div className="space-y-2 p-3 rounded-lg bg-[#03A0A0]">
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-sm font-medium text-white">{selectedChain === 'all' ? 'All Chains' : selectedChain.toUpperCase()}</span>
-                            <Badge variant="secondary" className="bg-white/20">Native</Badge>
-                          </div>
-                          <button
-                            onClick={() => copyContractAddress("wallet-address")}
-                            className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition"
-                            aria-label="Copy wallet address"
-                          >
-                            {copiedAddress === "wallet-address" ? (
-                              <Check className="h-4 w-4 text-white" />
-                            ) : (
-                              <Copy className="h-4 w-4 text-white" />
-                            )}
-                          </button>
-                        </div>
-                        <div className="flex justify-between text-black">
-                          <span className="text-sm opacity-70">Amount</span>
-                          <span className="font-medium">{Number(0).toFixed(6)}</span>
-                        </div>
-                        <div className="flex justify-between text-black">
-                          <span className="text-sm opacity-70">USD Value</span>
-                          <span className="font-medium">${Number(0).toLocaleString()}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+               <AnimatePresence>
+              <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }} >
+              <div className="space-y-2 p-3 rounded-lg bg-[#03A0A0]">
+               <div className="flex justify-between items-center">
+              <div className="flex items-center space-x-2">
+              <span className="text-sm font-medium text-white">
+            {selectedChain === 'all' ? 'All Chains' : selectedChain.toUpperCase()}
+          </span>
+          <Badge variant="secondary" className="bg-white/20 text-white">Native</Badge>
+          <span className="text-sm text-white">
+            {truncateString(walletAddress)}
+          </span>
+          <button 
+            onClick={() => copyContractAddress(walletAddress)}
+            className="p-1 rounded-full hover:bg-white/20"
+            aria-label="Copy wallet address"
+          >
+            {copiedAddress === walletAddress ? (
+              <Check className="h-4 w-4 text-white" />
+            ) : (
+              <Copy className="h-4 w-4 text-white" />
+            )}
+          </button>
+        </div>
+        <button
+          onClick={() => setShowBalanceNumbers(!showBalanceNumbers)}
+          className="p-2 rounded-full bg-white hover:bg-gray-100 transition"
+          aria-label="Toggle balance visibility"
+        >
+          {showBalanceNumbers ? <Eye /> : <EyeOff />}
+        </button>
+      </div>
+
+      {/* Balance values - Always visible, just numbers toggle */}
+      <div className="flex justify-between text-white">
+        <span className="text-sm opacity-70">Amount</span>
+        <span className="font-medium">
+          {showBalanceNumbers ? Number(0).toFixed(6) : "******"}
+        </span>
+      </div>
+      <div className="flex justify-between text-white">
+        <span className="text-sm opacity-70">USD Value</span>
+        <span className="font-medium">
+          {showBalanceNumbers ? `$${Number(0).toLocaleString()}` : "******"}
+        </span>
+      </div>
+    </div>
+   </motion.div>
+   </AnimatePresence>
               </div>
             </div>
           </div>
@@ -333,7 +355,7 @@ const Wallet: React.FC = () => {
                 </div>
                 
                 {/* Import/Delete Buttons for ETH and Base */}
-                {(network.value === 'eth' || network.value === 'base') && (
+             {(network.value === 'eth' || network.value === 'base') && (
                   <div className="flex gap-2">
                     <Button 
                       variant="outline"
@@ -347,46 +369,53 @@ const Wallet: React.FC = () => {
                 )}
               </div>
               
-              {/* Tokens with Click Handler */}
-              <div className="space-y-3">
-                {filteredTokens
-                  .filter(token => token.chain === network.value)
-                  .map(token => (
-                    <div
-                      key={token.id}
-                      onClick={() => handleTokenClick(token)}
-                      className="bg-white shadow border-[1px] border-[#E9E9E9] rounded-[8px] p-3 flex justify-between items-center cursor-pointer transition w-full text-left"
-                    >
-                      <div className="flex items-center gap-3">
-                        <img 
-                          src={`/images/tokens/${token.symbol.toLowerCase()}.svg`} 
-                          alt={token.symbol}
-                          className="w-8 h-8"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = '/images/solana.png';
-                          }}
-                        />
-                        <div>
-                          <p className="text-[#4F4F4F] font-medium">{token.name}</p>
-                          <p className="text-[#4F4F4F] text-sm">{token.amount} {token.symbol}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[#4F4F4F]">${token.usdValue.toFixed(2)}</p>
-                        <p className="text-[#4F4F4F] text-sm">+0.00%</p>
-                      </div>
-
-                       <button
-                         onClick={(e) => {
-                         e.stopPropagation(); 
-                         handleDeleteToken(token.id);
-                       }}
-                       className="ml-4 p-2 rounded-full hover:bg-gray-100"
-                       aria-label="Delete token">
-                       <Trash2 className="h-4 w-4 text-red-500" />
-                      </button>
-                    </div>
-                  ))}
+        {/* Tokens with Click Handler */}
+          <div className="space-y-3">
+            {filteredTokens
+           .filter(token => token.chain === network.value)
+           .map(token => (
+          <div
+           key={token.id}
+           className="bg-white shadow border-[1px] border-[#E9E9E9] rounded-[8px] p-3 flex justify-between items-center transition w-full text-left"
+           >
+          <div 
+           className="flex-1 flex items-center gap-3"
+           onClick={() => handleTokenClick(token)}>
+          <img 
+            src={`/images/tokens/${token.symbol.toLowerCase()}.svg`} 
+            alt={token.symbol}
+            className="w-8 h-8"
+            onError={(e) => {
+            (e.target as HTMLImageElement).src = '/images/solana.png';
+           }}
+          />
+          <div>
+          <p className="text-[#4F4F4F] font-medium">{token.name}</p>
+          <p className="text-[#4F4F4F] text-sm">{token.amount} {token.symbol}</p>
+        </div>
+      </div>
+      
+      <div className="text-right">
+        <p className="text-[#4F4F4F]">${token.usdValue.toFixed(2)}</p>
+        <p className="text-[#4F4F4F] text-sm">+0.00%</p>
+      </div>
+      
+      {/* Delete Button (only for non-Solana tokens) */}
+      {token.chain !== 'sol' && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent triggering token click
+            handleDeleteToken(token.id);
+          }}
+          className="ml-4 p-2 rounded-full hover:bg-gray-100"
+          aria-label="Delete token"
+        >
+          <Trash2 className="h-4 w-4 text-red-500" />
+        </button>
+      )}
+    </div>
+  ))
+}
               </div>
             </CardContent>
           </Card>
@@ -667,6 +696,14 @@ const Wallet: React.FC = () => {
                   <span className="text-[#7B7B7B] font-bold">Token Name:</span>
                    <div className="flex items-center gap-2">
                       <span className="text-[#7B7B7B]">{selectedToken.name}</span>
+                  </div>
+                </div>
+                <div>
+                  <span className="text-[#7B7B7B] font-bold">Token Ticker:</span>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="bg-white/20">
+                      {selectedToken.symbol}
+                    </Badge>
                       <Button 
                         onClick={() => copyToClipboard(selectedToken.name, "Token Name")}
                        className="p-1 rounded-full hover:bg-gray-100"
@@ -680,20 +717,24 @@ const Wallet: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <span className="text-[#7B7B7B] font-bold">Token Ticker:</span>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="bg-white/20">
-                      {selectedToken.symbol}
-                    </Badge>
-                  </div>
-                </div>
-                <div>
                   <span className="text-[#7B7B7B] font-bold">Market Cap:</span>
                   <p className="text-[#7B7B7B]">$0</p>
                 </div>
                 <div>
                   <span className="text-[#7B7B7B] font-bold">Price:</span>
+                  <div className="flex items-center gap-2">
                   <p className="text-[#7B7B7B]">${selectedToken.usdValue.toFixed(6)}</p>
+                   <Button 
+                        onClick={() => copyToClipboard(selectedToken.name, "Token Name")}
+                       className="p-1 rounded-full hover:bg-gray-100"
+                      aria-label="Copy token name">
+                       {copiedText === "Token Name" ? (
+                        <Check className="h-4 w-4 text-green-500" />
+                      ) : (
+                       <Copy className="h-4 w-4 text-gray-400" />
+                      )}
+                  </Button>
+                  </div>
                 </div>
                 <div>
                   <span className="text-[#7B7B7B] font-bold">Liquidity:</span>
@@ -701,12 +742,34 @@ const Wallet: React.FC = () => {
                 </div>
                 <div>
                   <span className="text-[#7B7B7B] font-bold">24hrs Volume:</span>
+                  <div className="flex items-center gap-2">
                   <p className="text-[#7B7B7B]">$0</p>
+                   <Button 
+                        onClick={() => copyToClipboard(selectedToken.name, "Token Name")}
+                       className="p-1 rounded-full hover:bg-gray-100"
+                      aria-label="Copy token name">
+                       {copiedText === "Token Name" ? (
+                        <Check className="h-4 w-4 text-green-500" />
+                      ) : (
+                       <Copy className="h-4 w-4 text-gray-400" />
+                      )}
+                  </Button>
+                  </div>
                 </div>
-                <div>
                   <span className="text-[#7B7B7B] font-bold">1 hr Volume:</span>
-                  <p className="text-[#7B7B7B]">$0</p>
-                </div>
+                  <div className='flex items-center gap-2'>
+                  <p className="text-[#7B7B7B] font-bold">$0</p>
+                   <Button 
+                        onClick={() => copyToClipboard(selectedToken.name, "Token Name")}
+                       className="p-1 rounded-full hover:bg-gray-100"
+                      aria-label="Copy token name">
+                       {copiedText === "Token Name" ? (
+                        <Check className="h-4 w-4 text-green-500" />
+                      ) : (
+                       <Copy className="h-4 w-4 text-gray-400" />
+                      )}
+                  </Button>
+                  </div>
               </div>
               <div className="flex gap-3 mt-6">
                 <Button 
