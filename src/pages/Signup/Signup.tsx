@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { register, login as loginApi } from '../../api/auth';
+// import { register, login as loginApi } from '../../api/auth';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { Tabs, TabsList, TabsTrigger } from '../../reuseables/tabs';
 import { Label } from '../../reuseables/label';
@@ -38,11 +38,10 @@ export default function NewLogin() {
     const msg = err?.response?.data?.message ?? fallback;
     toast.error(msg);
   };
-
   const handleLoginSubmit = async (vals: any) => {
     try {
-      const user = await loginApi(vals);
-      login(user);
+      // Using mock auth instead of real API during development
+      login(vals.email);
       toast.success('Login successful!');
       navigate('/');
     } catch (e) {
@@ -51,9 +50,10 @@ export default function NewLogin() {
   };
   const handleSignupSubmit = async (vals: any) => {
     try {
-      await register(vals);
-      toast.success('Signup successful! Please login.');
-      navigate(`/verify-otp?email=${encodeURIComponent(vals.email)}`);
+      // Using mock auth during development
+      login(vals.email); // Auto-login after signup for development
+      toast.success('Signup successful!');
+      navigate('/'); // Go directly to home for development
     } catch (e) {
       handleApiError(e, 'Signup failed');
     }

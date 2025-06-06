@@ -1,10 +1,12 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
 import { type User } from './types';
+import { mockAuth } from '../lib/mockAuth';
 
 type AuthContextType = {
   user: Partial<User> | null;
-  login: (user: Partial<User>) => void;
+  login: (email: string) => void;
   logout: () => void;
+  isAuthenticated: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -14,14 +16,21 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<Partial<User> | null>(null);
+  const isAuthenticated = mockAuth.isAuthenticated();
+  const user = mockAuth.getUser();
 
-  const login = (userData: Partial<User>) => setUser(userData);
-  const logout = () => setUser(null);
+  const login = (email: string) => {
+    mockAuth.login(email);
+    window.location.href = '/'; // Redirect to home after login
+  };
 
+  const logout = () => {
+    mockAuth.logout();
+    window.location.href = '/sign-up'; // Redirect to sign-up after logout
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
