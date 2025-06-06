@@ -93,10 +93,17 @@ export default function Sidebar() {
 
         <div className='mt-6'>
           <hr className='my-4 border-gray-200' />
-
-          <button className='flex items-center gap-2 text-sm text-gray-700 hover:text-cyan-600 px-3 py-2 w-full'>
-            <FaCog /> <Link to='/settings'>Settings</Link>
-          </button>
+          <Link to='/settings' className='cursor-pointer'>
+            <button
+              className={`flex items-center gap-2 text-sm cursor-pointer ${
+                currentPath === '/settings'
+                  ? 'bg-[#007b83] text-white shadow-md'
+                  : 'text-gray-800 hover:bg-gray-100'
+              } px-3 py-2 w-full`}
+            >
+              <FaCog /> Settings
+            </button>
+          </Link>
           <button
             onClick={handleLogout}
             className='flex items-center gap-2 text-sm text-gray-700 hover:text-red-500 px-3 py-2 w-full'
