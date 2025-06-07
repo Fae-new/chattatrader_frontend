@@ -6,7 +6,6 @@ import {
   FaHistory,
   FaSearch,
   FaChartLine,
-  FaCompass,
   FaBars,
   FaTimes,
 } from 'react-icons/fa';
@@ -26,11 +25,7 @@ const navLinks = [
     icon: <FaWallet className='inline' />,
     path: '/app/wallet',
   },
-  {
-    label: 'Explore',
-    icon: <FaCompass className='inline' />,
-    path: '/app/explore',
-  },
+
   {
     label: 'Trade',
     icon: <FaChartLine className='inline' />,

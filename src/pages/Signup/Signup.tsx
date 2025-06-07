@@ -27,7 +27,7 @@ const loginValidationSchema = Yup.object({
   password: Yup.string().required('Password is required'),
 });
 
-export default function NewLogin() {
+export default function Signup() {
   const [selectedTab, setSelectedTab] = useState<string>('login');
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ export default function NewLogin() {
 
   const PasswordInput = ({
     id,
-    field,      // <-- from Formik's <Field>
+    field, // <-- from Formik's <Field>
     show,
     toggle,
     placeholder,
@@ -70,28 +70,32 @@ export default function NewLogin() {
     toggle: () => void;
     placeholder?: string;
   }) => (
-    <div className="relative">
+    <div className='relative'>
       <input
         {...field}
         id={id}
         type={show ? 'text' : 'password'}
         placeholder={placeholder}
         required
-        autoComplete="new-password"
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] text-gray-900"
+        autoComplete='new-password'
+        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] text-gray-900'
       />
       <div
-        className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-500"
+        className='absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-500'
         onClick={toggle}
       >
-        {show ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+        {show ? (
+          <EyeSlashIcon className='w-5 h-5' />
+        ) : (
+          <EyeIcon className='w-5 h-5' />
+        )}
       </div>
     </div>
   );
 
   const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false); // inside LoginForm now
-  
+
     return (
       <Formik
         initialValues={{ email: '', password: '' }}
@@ -99,51 +103,51 @@ export default function NewLogin() {
         onSubmit={handleLoginSubmit}
       >
         {({ values, handleChange, handleBlur, isSubmitting }) => (
-        <Form className="space-y-4">
-          <div>
-            <Label htmlFor='email' className='block text-left mb-1'>
-              Email
-            </Label>
-            <Input
-              label=''
-              id='email'
-              name='email'
-              type='email'
-              placeholder='Enter your email'
-              value={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            <ErrorMessage
-              name='email'
-              component='div'
-              className='text-red-500 text-sm mt-1'
-            />
-          </div>
+          <Form className='space-y-4'>
             <div>
-              <Label htmlFor="password" className="block text-left mb-1">
+              <Label htmlFor='email' className='block text-left mb-1'>
+                Email
+              </Label>
+              <Input
+                label=''
+                id='email'
+                name='email'
+                type='email'
+                placeholder='Enter your email'
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <ErrorMessage
+                name='email'
+                component='div'
+                className='text-red-500 text-sm mt-1'
+              />
+            </div>
+            <div>
+              <Label htmlFor='password' className='block text-left mb-1'>
                 Password
               </Label>
-              <Field name="password">
+              <Field name='password'>
                 {({ field }: any) => (
                   <PasswordInput
-                    id="password"
+                    id='password'
                     field={field}
                     show={showPassword}
                     toggle={() => setShowPassword(!showPassword)}
-                    placeholder="Enter your password"
+                    placeholder='Enter your password'
                   />
                 )}
               </Field>
               <ErrorMessage
-                name="password"
-                component="div"
-                className="text-red-500 text-sm mt-1"
+                name='password'
+                component='div'
+                className='text-red-500 text-sm mt-1'
               />
             </div>
             <Button
-              type="submit"
-              className="w-full py-2 bg-[#008080] text-white"
+              type='submit'
+              className='w-full py-2 bg-[#008080] text-white'
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Logging in…' : 'Login'}
@@ -153,12 +157,11 @@ export default function NewLogin() {
       </Formik>
     );
   };
-  
 
   const SignupForm = () => {
     const [showSignupPassword, setShowSignupPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+
     return (
       <Formik
         initialValues={{
@@ -171,122 +174,124 @@ export default function NewLogin() {
         onSubmit={handleSignupSubmit}
       >
         {({ values, handleChange, handleBlur, isSubmitting }) => (
-          <Form className="space-y-4">
+          <Form className='space-y-4'>
             <div>
-              <Label htmlFor="username" className="block text-left mb-1">
+              <Label htmlFor='username' className='block text-left mb-1'>
                 Username
               </Label>
               <Input
-                label=""
-                id="username"
-                name="username"
-                type="text"
-                placeholder="Enter your username"
+                label=''
+                id='username'
+                name='username'
+                type='text'
+                placeholder='Enter your username'
                 value={values.username}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
               <ErrorMessage
-                name="username"
-                component="div"
-                className="text-red-500 text-sm mt-1"
+                name='username'
+                component='div'
+                className='text-red-500 text-sm mt-1'
               />
             </div>
-  
+
             <div>
-              <Label htmlFor="email" className="block text-left mb-1">
+              <Label htmlFor='email' className='block text-left mb-1'>
                 Email
               </Label>
               <Input
-                label=""
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
+                label=''
+                id='email'
+                name='email'
+                type='email'
+                placeholder='Enter your email'
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
               <ErrorMessage
-                name="email"
-                component="div"
-                className="text-red-500 text-sm mt-1"
+                name='email'
+                component='div'
+                className='text-red-500 text-sm mt-1'
               />
             </div>
-  
+
             <div>
-              <Label htmlFor="password" className="block text-left mb-1">
+              <Label htmlFor='password' className='block text-left mb-1'>
                 Password
               </Label>
-              <Field name="password">
+              <Field name='password'>
                 {({ field }: any) => (
                   <PasswordInput
-                    id="password"
+                    id='password'
                     field={field}
                     show={showSignupPassword}
                     toggle={() => setShowSignupPassword(!showSignupPassword)}
-                    placeholder="Create a password"
+                    placeholder='Create a password'
                   />
                 )}
               </Field>
               <ErrorMessage
-                name="password"
-                component="div"
-                className="text-red-500 text-sm mt-1"
+                name='password'
+                component='div'
+                className='text-red-500 text-sm mt-1'
               />
             </div>
-  
+
             <div>
-              <Label htmlFor="confirmPassword" className="block text-left mb-1">
+              <Label htmlFor='confirmPassword' className='block text-left mb-1'>
                 Confirm Password
               </Label>
-              <Field name="confirmPassword">
+              <Field name='confirmPassword'>
                 {({ field }: any) => (
                   <PasswordInput
-                    id="confirmPassword"
+                    id='confirmPassword'
                     field={field}
                     show={showConfirmPassword}
                     toggle={() => setShowConfirmPassword(!showConfirmPassword)}
-                    placeholder="Confirm your password"
+                    placeholder='Confirm your password'
                   />
                 )}
               </Field>
               <ErrorMessage
-                name="confirmPassword"
-                component="div"
-                className="text-red-500 text-sm mt-1"
+                name='confirmPassword'
+                component='div'
+                className='text-red-500 text-sm mt-1'
               />
             </div>
-  
+
             <Button
-              type="submit"
-              className="w-full py-2 bg-[#008080] text-white"
+              type='submit'
+              className='w-full py-2 bg-[#008080] text-white'
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Signing up…' : 'Sign Up'}
             </Button>
-  
-            <div className="flex items-center my-4">
-              <hr className="flex-grow border-gray-300" />
-              <span className="px-2 text-sm text-gray-500">or continue with</span>
-              <hr className="flex-grow border-gray-300" />
+
+            <div className='flex items-center my-4'>
+              <hr className='flex-grow border-gray-300' />
+              <span className='px-2 text-sm text-gray-500'>
+                or continue with
+              </span>
+              <hr className='flex-grow border-gray-300' />
             </div>
-  
-            <div className="flex align-middle justify-center">
-              <img src="/images/frames.svg" alt="Google" className="w-7 h-7" />
+
+            <div className='flex align-middle justify-center'>
+              <img src='/images/frames.svg' alt='Google' className='w-7 h-7' />
             </div>
-  
+
             <p
-              className="text-sm sm:text-base text-[#7B7B7B] 
+              className='text-sm sm:text-base text-[#7B7B7B] 
                 font-normal text-center sm:text-left mt-4
-                leading-relaxed px-4 sm:px-0"
+                leading-relaxed px-4 sm:px-0'
             >
               By pressing Continue, you agree to Fantasy{' '}
-              <a href="#" className="text-[#4C3BCF] underline">
+              <a href='#' className='text-[#4C3BCF] underline'>
                 Terms of Service
               </a>{' '}
               and{' '}
-              <a href="#" className="text-[#4C3BCF] underline">
+              <a href='#' className='text-[#4C3BCF] underline'>
                 Privacy Policy
               </a>
               .
@@ -296,7 +301,7 @@ export default function NewLogin() {
       </Formik>
     );
   };
-  
+
   return (
     <div className='flex flex-col md:flex-row w-full min-h-screen'>
       <div className='w-full md:w-1/2 flex flex-col'>
@@ -332,4 +337,3 @@ export default function NewLogin() {
     </div>
   );
 }
-

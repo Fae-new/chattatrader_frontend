@@ -222,7 +222,7 @@ const Wallet: React.FC = () => {
   return (
     <div className='bg-gradient-to-b from-gray-50 to-white min-h-screen p-2 pt-0 md:p-6'>
       {/* Header */}{' '}
-      <header className='flex justify-end md:justify-between items-center sm:p-0 mb-4 md:mb-6 relative z-10'>
+      <header className='flex justify-end md:justify-between items-center sm:p-2 mb-4 md:mb-6 relative z-10'>
         <div className='flex flex-row-reverse md:flex-row items-center gap-3'>
           <div className='relative'>
             <img
@@ -250,7 +250,7 @@ const Wallet: React.FC = () => {
           </Link>
         </div>
       </header>
-      {/* Balance Card */}{' '}
+      {/* Balance Card */}
       <Card className='bg-gradient-to-r from-[#008080] to-[#006666] rounded-xl mb-6 mt-6 md:mt-0 shadow-lg overflow-hidden relative max-w-xl mx-auto'>
         <div className='absolute inset-0 bg-pattern opacity-10'></div>
         <CardContent className='p-3 relative z-10'>

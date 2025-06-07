@@ -1,21 +1,19 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { lazy } from 'react';
 import SidebarLayout from './layout/SideLayout';
 import PlainLayout from './layout/PlainLayout';
 import { ErrorWithSidebar } from './layout/ErrorWithSidebar';
 import { ProtectedRoute } from './components/ProtectedRoute';
-
-const Home = lazy(() => import('./pages/Home/Home'));
-const About = lazy(() => import('./pages/About/About'));
-const Chat = lazy(() => import('./pages/Chat/Chat'));
-const NotFound = lazy(() => import('./pages/NotFound'));
-const ComingSoon = lazy(() => import('./pages/ComingSoon/ComingSoon'));
-const Signup = lazy(() => import('./pages/Signup/Signup'));
-const VerifyOtp = lazy(() => import('./pages/VerifyOtp/VerifyOtp'));
-const History = lazy(() => import('./pages/History/History'));
-const Wallet = lazy(() => import('./pages/wallet/wallet'));
-const Discovery = lazy(() => import('./pages/discovery/discovery'));
-const Settings = lazy(() => import('./pages/Settings/Settings'));
+import Home from './pages/Home/Home';
+import VerifyOtp from './pages/VerifyOtp/VerifyOtp';
+import NotFound from './pages/NotFound';
+import About from './pages/About/About';
+import ChatPage from './pages/Chat/Chat';
+import Signup from './pages/Signup/Signup';
+import History from './pages/History/History';
+import Settings from './pages/Settings/Settings';
+import ComingSoon from './pages/ComingSoon/ComingSoon';
+import Discover from './pages/discovery/discover';
+import { Wallet } from 'lucide-react';
 
 export const router = createBrowserRouter([
   // Home route with PlainLayout
@@ -58,7 +56,7 @@ export const router = createBrowserRouter([
         path: 'chat',
         element: (
           <ProtectedRoute>
-            <Chat />
+            <ChatPage />
           </ProtectedRoute>
         ),
       },
@@ -90,7 +88,7 @@ export const router = createBrowserRouter([
         path: 'discover',
         element: (
           <ProtectedRoute>
-            <Discovery />
+            <Discover />
           </ProtectedRoute>
         ),
       },

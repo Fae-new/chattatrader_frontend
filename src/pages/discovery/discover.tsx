@@ -20,7 +20,7 @@ interface TrendingItem {
 
 type Chain = 'solana' | 'ethereum' | 'base';
 
-const Discovery: React.FC = () => {
+const Discover: React.FC = () => {
   const [tradeAction, setTradeAction] = useState<'buy' | 'sell' | null>(null);
   const [selectedChain, setSelectedChain] = useState<Chain>('solana');
   const [showDetails, setShowDetails] = useState<TrendingItem | null>();
@@ -210,4 +210,4 @@ const Discovery: React.FC = () => {
   );
 };
 
-export default Discovery;
+export default Discover;
