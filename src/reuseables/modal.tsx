@@ -16,7 +16,7 @@ export const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className='bg-white rounded-[8px] shadow-lg w-full max-w-lg p-5 relative text-gray-800'
+        className='bg-white rounded-[8px] shadow-lg w-full max-w-2xl p-5 relative text-gray-800 max-h-[90vh] overflow-hidden'
       >
         <button
           onClick={onClose}

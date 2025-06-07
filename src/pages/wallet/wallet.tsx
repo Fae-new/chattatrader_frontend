@@ -76,7 +76,7 @@ const networks: Network[] = [
 
 const Wallet: React.FC = () => {
   // State
-  const [showBalanceNumbers, setShowBalanceNumbers] = useState(true);
+  const [showBalanceNumbers, setShowBalanceNumbers] = useState(false);
   const [tokens, setTokens] = useState<Token[]>(initialTokens);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
   const [expandedNetworks, setExpandedNetworks] = useState<{
@@ -222,7 +222,7 @@ const Wallet: React.FC = () => {
   return (
     <div className='bg-gradient-to-b from-gray-50 to-white min-h-screen p-2 pt-0 md:p-6'>
       {/* Header */}{' '}
-      <header className='flex justify-end md:justify-between items-center sm:p-3 mb-4 md:mb-6 relative z-10'>
+      <header className='flex justify-end md:justify-between items-center sm:p-4 mb-4 md:mb-6 relative z-10'>
         <div className='flex flex-row-reverse md:flex-row items-center gap-3'>
           <div className='relative'>
             <img
@@ -277,7 +277,7 @@ const Wallet: React.FC = () => {
             <div className='bg-white/10 px-3 py-1.5 rounded-lg'>
               <span className='text-xs text-white/70 block'>USD</span>
               <p className='text-base font-bold text-white'>
-                {showBalanceNumbers ? '$0.00' : '******'}
+                {showBalanceNumbers ? '$0.00' : '*****'}
               </p>
             </div>
           </div>
