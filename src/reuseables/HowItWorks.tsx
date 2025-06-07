@@ -8,6 +8,7 @@ import {
   AccessibilityIcon,
   LightningBoltIcon,
 } from "../data/Icons";
+import type { JSX } from 'react';
 
 interface Feature {
   icon: JSX.Element;

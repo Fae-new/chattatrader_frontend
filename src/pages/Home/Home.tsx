@@ -19,6 +19,8 @@ export default function Home() {
     setMounted(true);
   }, []);
 
+  if (!mounted) return null; // prevent SSR mismatch
+
   return (
     <ThemeProvider>
       <div className="min-h-screen bg-[#060b1a]">

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './accordion';
-import { Plus, Minus } from "lucide-react";
 
 interface FAQItem {
   question: string;
