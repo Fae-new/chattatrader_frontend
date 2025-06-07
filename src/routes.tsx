@@ -13,7 +13,7 @@ import History from './pages/History/History';
 import Settings from './pages/Settings/Settings';
 import ComingSoon from './pages/ComingSoon/ComingSoon';
 import Discover from './pages/discovery/discover';
-import { Wallet } from 'lucide-react';
+import Wallet from './pages/wallet/wallet';
 
 export const router = createBrowserRouter([
   // Home route with PlainLayout
