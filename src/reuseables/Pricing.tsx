@@ -49,7 +49,7 @@ const pricingList: PricingPlan[] = [
     monthlyPrice: "$X",
     yearlyPrice: "$X",
     description: "Coming Soon!!!",
-    buttonText: "Select Master",
+    buttonText: "Coming Soon!!!",
     benefitList: [
       "Everything in Pro",
       "AI launchpad",
