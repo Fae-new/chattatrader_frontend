@@ -21,12 +21,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = (email: string) => {
     mockAuth.login(email);
-    window.location.href = '/'; // Redirect to home after login
+    window.location.href = 'app/discover';
   };
 
   const logout = () => {
     mockAuth.logout();
-    window.location.href = '/sign-up'; // Redirect to sign-up after logout
+    window.location.href = '/';
   };
 
   return (
