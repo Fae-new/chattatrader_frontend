@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import Input from '../../reuseables/input';
 import { Button } from '../../reuseables/button';
 import toast from 'react-hot-toast';
+import { Field } from 'formik';
 
 const signupValidationSchema = Yup.object({
   username: Yup.string().required('Username is required'),
@@ -28,9 +29,6 @@ const loginValidationSchema = Yup.object({
 
 export default function NewLogin() {
   const [selectedTab, setSelectedTab] = useState<string>('login');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showSignupPassword, setShowSignupPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -61,47 +59,47 @@ export default function NewLogin() {
 
   const PasswordInput = ({
     id,
-    name,
-    value,
-    onChange,
-    onBlur,
+    field,      // <-- from Formik's <Field>
     show,
     toggle,
     placeholder,
-  }: any) => (
-    <div className='relative'>
+  }: {
+    id: string;
+    field: any;
+    show: boolean;
+    toggle: () => void;
+    placeholder?: string;
+  }) => (
+    <div className="relative">
       <input
+        {...field}
         id={id}
-        name={name}
         type={show ? 'text' : 'password'}
         placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
         required
-        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080]'
+        autoComplete="new-password"
+        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] text-gray-900"
       />
       <div
-        className='absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-500'
+        className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-500"
         onClick={toggle}
       >
-        {show ? (
-          <EyeSlashIcon className='w-5 h-5' />
-        ) : (
-          <EyeIcon className='w-5 h-5' />
-        )}
+        {show ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
       </div>
     </div>
   );
 
-  const LoginForm = () => (
-    <Formik
-      initialValues={{ email: '', password: '' }}
-      validationSchema={loginValidationSchema}
-      onSubmit={handleLoginSubmit}
-    >
-      {({ values, handleChange, handleBlur, isSubmitting }) => (
-        <Form className='space-y-4'>
+  const LoginForm = () => {
+    const [showPassword, setShowPassword] = useState(false); // inside LoginForm now
+  
+    return (
+      <Formik
+        initialValues={{ email: '', password: '' }}
+        validationSchema={loginValidationSchema}
+        onSubmit={handleLoginSubmit}
+      >
+        {({ values, handleChange, handleBlur, isSubmitting }) => (
+        <Form className="space-y-4">
           <div>
             <Label htmlFor='email' className='block text-left mb-1'>
               Email
@@ -122,169 +120,183 @@ export default function NewLogin() {
               className='text-red-500 text-sm mt-1'
             />
           </div>
-          <div>
-            <Label htmlFor='password' className='block text-left mb-1'>
-              Password
-            </Label>
-            <PasswordInput
-              id='password'
-              name='password'
-              value={values.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              show={showPassword}
-              toggle={() => setShowPassword(!showPassword)}
-              placeholder='Enter your password'
-            />
-            <ErrorMessage
-              name='password'
-              component='div'
-              className='text-red-500 text-sm mt-1'
-            />
-          </div>
-          <Button
-            type='submit'
-            className='w-full py-2 bg-[#008080] text-white'
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Logging in…' : 'Login'}
-          </Button>
-        </Form>
-      )}
-    </Formik>
-  );
+            <div>
+              <Label htmlFor="password" className="block text-left mb-1">
+                Password
+              </Label>
+              <Field name="password">
+                {({ field }: any) => (
+                  <PasswordInput
+                    id="password"
+                    field={field}
+                    show={showPassword}
+                    toggle={() => setShowPassword(!showPassword)}
+                    placeholder="Enter your password"
+                  />
+                )}
+              </Field>
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full py-2 bg-[#008080] text-white"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Logging in…' : 'Login'}
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    );
+  };
+  
 
-  const SignupForm = () => (
-    <Formik
-      initialValues={{
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      }}
-      validationSchema={signupValidationSchema}
-      onSubmit={handleSignupSubmit}
-    >
-      {({ values, handleChange, handleBlur, isSubmitting }) => (
-        <Form className='space-y-4'>
-          <div>
-            <Label htmlFor='username' className='block text-left mb-1'>
-              Username
-            </Label>
-            <Input
-              label=''
-              id='username'
-              name='username'
-              type='text'
-              placeholder='Enter your username'
-              value={values.username}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            <ErrorMessage
-              name='username'
-              component='div'
-              className='text-red-500 text-sm mt-1'
-            />
-          </div>
-          <div>
-            <Label htmlFor='email' className='block text-left mb-1'>
-              Email
-            </Label>
-            <Input
-              label=''
-              id='email'
-              name='email'
-              type='email'
-              placeholder='Enter your email'
-              value={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            <ErrorMessage
-              name='email'
-              component='div'
-              className='text-red-500 text-sm mt-1'
-            />
-          </div>
-          <div>
-            <Label htmlFor='password' className='block text-left mb-1'>
-              Password
-            </Label>
-            <PasswordInput
-              id='password'
-              name='password'
-              value={values.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              show={showSignupPassword}
-              toggle={() => setShowSignupPassword(!showSignupPassword)}
-              placeholder='Create a password'
-            />
-            <ErrorMessage
-              name='password'
-              component='div'
-              className='text-red-500 text-sm mt-1'
-            />
-          </div>
-          <div>
-            <Label htmlFor='confirmPassword' className='block text-left mb-1'>
-              Confirm Password
-            </Label>
-            <PasswordInput
-              id='confirmPassword'
-              name='confirmPassword'
-              value={values.confirmPassword}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              show={showConfirmPassword}
-              toggle={() => setShowConfirmPassword(!showConfirmPassword)}
-              placeholder='Confirm your password'
-            />
-            <ErrorMessage
-              name='confirmPassword'
-              component='div'
-              className='text-red-500 text-sm mt-1'
-            />
-          </div>
-
-          <Button
-            type='submit'
-            className='w-full py-2 bg-[#008080] text-white'
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Signing up…' : 'Sign Up'}
-          </Button>
-
-          <div className='flex items-center my-4'>
-            <hr className='flex-grow border-gray-300' />
-            <span className='px-2 text-sm text-gray-500'>or continue with</span>
-            <hr className='flex-grow border-gray-300' />
-          </div>
-          <div className='flex align-middle justify-center'>
-            <img src='/images/frames.svg' alt='Google' className='w-7 h-7 ' />
-          </div>
-
-          <p
-            className='text-sm sm:text-base text-[#7B7B7B] 
-          font-normal text-center sm:text-left mt-4
-           leading-relaxed px-4 sm:px-0'
-          >
-            By pressing Continue, you agree to Fantasy{' '}
-            <a href='#' className='text-[#4C3BCF] underline'>
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a href='#' className='text-[#4C3BCF] underline'>
-              Privacy Policy
-            </a>
-            .
-          </p>
-        </Form>
-      )}
-    </Formik>
-  );
-
+  const SignupForm = () => {
+    const [showSignupPassword, setShowSignupPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
+    return (
+      <Formik
+        initialValues={{
+          username: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+        }}
+        validationSchema={signupValidationSchema}
+        onSubmit={handleSignupSubmit}
+      >
+        {({ values, handleChange, handleBlur, isSubmitting }) => (
+          <Form className="space-y-4">
+            <div>
+              <Label htmlFor="username" className="block text-left mb-1">
+                Username
+              </Label>
+              <Input
+                label=""
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Enter your username"
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <ErrorMessage
+                name="username"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+  
+            <div>
+              <Label htmlFor="email" className="block text-left mb-1">
+                Email
+              </Label>
+              <Input
+                label=""
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+  
+            <div>
+              <Label htmlFor="password" className="block text-left mb-1">
+                Password
+              </Label>
+              <Field name="password">
+                {({ field }: any) => (
+                  <PasswordInput
+                    id="password"
+                    field={field}
+                    show={showSignupPassword}
+                    toggle={() => setShowSignupPassword(!showSignupPassword)}
+                    placeholder="Create a password"
+                  />
+                )}
+              </Field>
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+  
+            <div>
+              <Label htmlFor="confirmPassword" className="block text-left mb-1">
+                Confirm Password
+              </Label>
+              <Field name="confirmPassword">
+                {({ field }: any) => (
+                  <PasswordInput
+                    id="confirmPassword"
+                    field={field}
+                    show={showConfirmPassword}
+                    toggle={() => setShowConfirmPassword(!showConfirmPassword)}
+                    placeholder="Confirm your password"
+                  />
+                )}
+              </Field>
+              <ErrorMessage
+                name="confirmPassword"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+  
+            <Button
+              type="submit"
+              className="w-full py-2 bg-[#008080] text-white"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Signing up…' : 'Sign Up'}
+            </Button>
+  
+            <div className="flex items-center my-4">
+              <hr className="flex-grow border-gray-300" />
+              <span className="px-2 text-sm text-gray-500">or continue with</span>
+              <hr className="flex-grow border-gray-300" />
+            </div>
+  
+            <div className="flex align-middle justify-center">
+              <img src="/images/frames.svg" alt="Google" className="w-7 h-7" />
+            </div>
+  
+            <p
+              className="text-sm sm:text-base text-[#7B7B7B] 
+                font-normal text-center sm:text-left mt-4
+                leading-relaxed px-4 sm:px-0"
+            >
+              By pressing Continue, you agree to Fantasy{' '}
+              <a href="#" className="text-[#4C3BCF] underline">
+                Terms of Service
+              </a>{' '}
+              and{' '}
+              <a href="#" className="text-[#4C3BCF] underline">
+                Privacy Policy
+              </a>
+              .
+            </p>
+          </Form>
+        )}
+      </Formik>
+    );
+  };
+  
   return (
     <div className='flex flex-col md:flex-row w-full min-h-screen'>
       <div className='w-full md:w-1/2 flex flex-col'>
@@ -320,3 +332,4 @@ export default function NewLogin() {
     </div>
   );
 }
+
