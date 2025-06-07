@@ -6,7 +6,6 @@ import {
   FaHistory,
   FaSearch,
   FaChartLine,
-  FaCompass,
   FaBars,
   FaTimes,
 } from 'react-icons/fa';
@@ -18,20 +17,24 @@ const navLinks = [
   {
     label: 'Discover',
     icon: <FaSearch className='inline' />,
-    path: '/discover',
+    path: '/app/discover',
   },
-  { label: 'Chat', icon: <FaMessage className='inline' />, path: '/chat' },
-  { label: 'Wallet', icon: <FaWallet className='inline' />, path: '/wallet' },
+  { label: 'Chat', icon: <FaMessage className='inline' />, path: '/app/chat' },
   {
-    label: 'Explore',
-    icon: <FaCompass className='inline' />,
-    path: '/explore',
+    label: 'Wallet',
+    icon: <FaWallet className='inline' />,
+    path: '/app/wallet',
   },
-  { label: 'Trade', icon: <FaChartLine className='inline' />, path: '/trade' },
+
+  {
+    label: 'Trade',
+    icon: <FaChartLine className='inline' />,
+    path: '/app/trade',
+  },
   {
     label: 'History',
     icon: <FaHistory className='inline' />,
-    path: '/history',
+    path: '/app/history',
   },
 ];
 
@@ -68,8 +71,8 @@ export default function Sidebar() {
             {navLinks.map(({ label, icon, path }) => {
               const isActive =
                 label === 'Discover'
-                  ? currentPath === '/' ||
-                    currentPath.toLowerCase() === '/discover'
+                  ? currentPath === '/app' ||
+                    currentPath.toLowerCase() === '/app/discover'
                   : currentPath.toLowerCase() === path;
 
               return (
@@ -92,18 +95,24 @@ export default function Sidebar() {
         </div>
 
         <div className='mt-6'>
-          <hr className='my-4 border-gray-200' />
-
-          <button className='flex items-center gap-2 text-sm text-gray-700 hover:text-cyan-600 px-3 py-2 w-full'>
-            <FaCog /> <Link to='/settings'>Settings</Link>
-          </button>
+          <hr className='my-4 border-gray-200' />{' '}
+          <Link to='/app/settings' className='cursor-pointer'>
+            <button
+              className={`flex items-center gap-2 text-sm cursor-pointer ${
+                currentPath === '/app/settings'
+                  ? 'bg-[#007b83] text-white shadow-md'
+                  : 'text-gray-800 hover:bg-gray-100'
+              } px-3 py-2 w-full`}
+            >
+              <FaCog /> Settings
+            </button>
+          </Link>
           <button
             onClick={handleLogout}
             className='flex items-center gap-2 text-sm text-gray-700 hover:text-red-500 px-3 py-2 w-full'
           >
             <FaSignOutAlt /> Logout
           </button>
-
           <div className='flex items-center gap-2 mt-4 px-3'>
             <div className='w-8 h-8 bg-cyan-600 text-white flex items-center justify-center rounded-full text-sm font-semibold'>
               {user?.username?.charAt(0).toUpperCase() || 'M'}
