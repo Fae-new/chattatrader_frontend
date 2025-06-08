@@ -59,7 +59,7 @@ export default function Signup() {
 
   const PasswordInput = ({
     id,
-    field, // <-- from Formik's <Field>
+    field,
     show,
     toggle,
     placeholder,
@@ -105,7 +105,7 @@ export default function Signup() {
         {({ values, handleChange, handleBlur, isSubmitting }) => (
           <Form className='space-y-4'>
             <div>
-              <Label htmlFor='email' className='block text-left mb-1'>
+              <Label htmlFor='email' className='block text-left mb--1'>
                 Email
               </Label>
               <Input

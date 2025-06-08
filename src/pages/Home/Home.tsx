@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { ThemeProvider } from '../../context/theme-provider';
 import LandingNav from '../../reuseables/LandingNav';
 import { Hero } from '../../reuseables/hero';
 import { About } from '../../reuseables/About';
@@ -22,24 +21,22 @@ export default function Home() {
   if (!mounted) return null; // prevent SSR mismatch
 
   return (
-    <ThemeProvider>
-      <div className="min-h-screen bg-[#060b1a]">
-         <LandingNav />
-         <div className="md:pr-[50px] md:pl-[50px]">
-          <Hero />
-         <About />
-         <HowItWorks />
-         </div>
-        <Cta />
-        <Banner />
-        <div className="md:pr-[50px] md:pl-[50px]">
-          <Pricing />
-          <Services />
-          <Features />
-        </div>
-        <FAQ />
-        <Footer />
+    <div className='min-h-screen bg-[#060b1a]'>
+      <LandingNav />
+      <div className='md:pr-[50px] md:pl-[50px]'>
+        <Hero />
+        <About />
+        <HowItWorks />
       </div>
-    </ThemeProvider>
+      <Cta />
+      <Banner />
+      <div className='md:pr-[50px] md:pl-[50px]'>
+        <Pricing />
+        <Services />
+        <Features />
+      </div>
+      <FAQ />
+      <Footer />
+    </div>
   );
 }

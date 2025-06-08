@@ -6,13 +6,16 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const location = useLocation();
 
   if (!isAuthenticated) {
-    // Redirect to sign-up page if not authenticated
-    // Also save the attempted URL to redirect back after login
     return <Navigate to='/' state={{ from: location.pathname }} replace />;
+  }
+  if (!user?.isVerified) {
+    return (
+      <Navigate to='/verify-otp' state={{ from: location.pathname }} replace />
+    );
   }
 
   return <>{children}</>;

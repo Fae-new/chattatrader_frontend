@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: <PlainLayout />,
     children: [{ index: true, element: <Home /> }],
-  }, // Auth routes with PlainLayout
+  },
   {
     path: '/',
     element: <PlainLayout />,
