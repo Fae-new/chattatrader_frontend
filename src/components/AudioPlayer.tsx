@@ -62,7 +62,7 @@ export default function AudioPlayer() {
       <div className='flex items-center justify-between'>
         <button
           onClick={togglePlay}
-          className='text-white bg-gray-700 hover:bg-gray-600 p-2 rounded-full'
+          className='text-white bg-gray-700 hover:bg-gray-600 p-2 rounded-full cursor-pointer'
         >
           {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
         </button>

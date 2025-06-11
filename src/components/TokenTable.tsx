@@ -99,7 +99,7 @@ const TokenTable: React.FC<TokenTableProps> = ({ tokens }) => {
                       </span>
                       <button
                         onClick={() => copyToClipboard(token.address)}
-                        className='text-gray-300 hover:text-white transition-colors focus:outline-none rounded-sm'
+                        className='text-gray-300 hover:text-white transition-colors focus:outline-none rounded-sm cursor-pointer'
                         title='Copy address'
                         aria-label='Copy address to clipboard'
                       >

@@ -59,7 +59,7 @@ const NetworkCard: React.FC<NetworkCardProps> = ({
             </Badge>
             <button
               onClick={() => onCopyAddress(walletAddress)}
-              className='p-1 rounded-full hover:bg-gray-200 transition-all duration-200'
+              className='p-1 rounded-full hover:bg-gray-200 transition-all duration-200 cursor-pointer'
               aria-label='Copy wallet address'
             >
               {copiedAddress === walletAddress ? (
@@ -81,7 +81,7 @@ const NetworkCard: React.FC<NetworkCardProps> = ({
           <Button
             variant='outline'
             size='sm'
-            className='px-3 py-1 h-8 text-xs cursor-pointer hover:bg-[#008080]/10 hover:text-[#008080] hover:border-[#008080] transition-colors'
+            className=' px-3 py-1 h-8 text-xs cursor-pointer hover:bg-[#008080]/10 hover:text-[#008080] hover:border-[#008080] transition-colors'
             onClick={onImportToken}
           >
             <Plus className='w-4 h-4 mr-1 text-[#008080]' />

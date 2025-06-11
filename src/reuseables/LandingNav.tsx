@@ -12,7 +12,6 @@ import {
   SheetTrigger,
 } from './sheet';
 
-import { buttonVariants } from './button';
 import { Menu } from 'lucide-react';
 import logo from '../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
@@ -40,20 +39,38 @@ const LandingNav: React.FC = () => {
   };
 
   return (
-    <header className='sticky border-b-[1px] top-0 z-40 w-full bg-[#060b1a] dark:border-b-[#222C3D] text-white'>
+    <header className='sticky border-b-[1px] top-0 z-40 w-full bg-white border-gray-200 text-gray-900'>
       <NavigationMenu className='mx-auto'>
-        <NavigationMenuList className='container h-14 px-4 w-screen flex justify-between'>
-          <NavigationMenuItem className='font-bold flex r'>
-            <div className='flex items-center justify-center md:justify-start space-x-2 mb-4 pt-4'>
+        <NavigationMenuList className='container h-14 px-4 w-screen flex items-center justify-between'>
+          <NavigationMenuItem className='font-bold'>
+            <a
+              rel='noreferrer noopener'
+              href='/'
+              className='flex items-center gap-2 text-gray-900 hover:text-gray-600'
+            >
+              <img src={logo} alt='ChattaTrader Logo' className='h-8 w-8' />
+              <span className='text-xl font-bold'>ChattaTrader</span>
+            </a>
+          </NavigationMenuItem>
+
+          {/* Desktop Navigation */}
+          <NavigationMenuItem className='hidden md:flex items-center gap-6'>
+            {routeList.map(({ href, label }) => (
               <a
                 rel='noreferrer noopener'
-                href='/'
-                className='ml-2 font-bold text-xl flex items-center space-x-2 text-white hover:text-gray-300'
+                key={label}
+                href={href}
+                className='text-gray-600 hover:text-gray-900 transition-colors'
               >
-                <img src={logo} alt='ChattaTrader Logo' />
-                <span>ChattaTrader</span>
+                {label}
               </a>
-            </div>
+            ))}
+            <button
+              onClick={handleSignUpClick}
+              className='px-4 py-2 bg-gradient-to-r from-[#008080] to-[#ff9500] text-white rounded-md hover:opacity-90 transition-opacity'
+            >
+              Sign Up
+            </button>
           </NavigationMenuItem>
 
           {/* mobile */}
@@ -61,18 +78,18 @@ const LandingNav: React.FC = () => {
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger className='px-2'>
                 <Menu
-                  className='flex md:hidden h-5 w-5 text-white'
+                  className='flex md:hidden h-5 w-5 text-gray-900'
                   onClick={() => setIsOpen(true)}
                   aria-label='Open Menu'
                 />
               </SheetTrigger>
 
-              <SheetContent side='left' className='bg-[#060b1a] text-white'>
+              <SheetContent side='left' className='bg-white'>
                 <SheetHeader>
-                  <SheetTitle className='font-bold text-xl text-white'>
+                  <SheetTitle className='font-bold text-xl text-gray-900'>
                     ChattaTrader
                   </SheetTitle>
-                </SheetHeader>
+                </SheetHeader>{' '}
                 <nav className='flex flex-col justify-center items-center gap-2 mt-4'>
                   {routeList.map(({ href, label }) => (
                     <a
@@ -80,7 +97,7 @@ const LandingNav: React.FC = () => {
                       key={label}
                       href={href}
                       onClick={() => setIsOpen(false)}
-                      className={`${buttonVariants({ variant: 'ghost' })} text-white hover:text-gray-300`}
+                      className='w-full text-center py-2 text-gray-900 hover:bg-gray-100 rounded-md transition-colors'
                     >
                       {label}
                     </a>
@@ -88,10 +105,7 @@ const LandingNav: React.FC = () => {
 
                   <button
                     onClick={handleSignUpClick}
-                    className={`${buttonVariants({
-                      variant: 'secondary',
-                      className: 'w-[110px] border',
-                    })} text-white`}
+                    className='px-4 py-2 bg-gradient-to-r from-[#008080] to-[#ff9500] text-white rounded-md hover:opacity-90 transition-opacity w-full'
                   >
                     Sign Up
                   </button>
@@ -99,32 +113,6 @@ const LandingNav: React.FC = () => {
               </SheetContent>
             </Sheet>
           </span>
-
-          {/* desktop */}
-          <nav className='hidden md:flex gap-2'>
-            {routeList.map((route, i) => (
-              <a
-                rel='noreferrer noopener'
-                href={route.href}
-                key={i}
-                className={`text-[17px] text-white hover:text-gray-300 ${buttonVariants({ variant: 'ghost' })}`}
-              >
-                {route.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className='hidden md:flex gap-2'>
-            <button
-              onClick={handleSignUpClick}
-              className={`${buttonVariants({ variant: 'secondary', className: 'border' })} text-white`}
-            >
-              Sign In/Up
-            </button>
-
-            {/* Uncomment if you want ModeToggle on desktop */}
-            {/* <ModeToggle /> */}
-          </div>
         </NavigationMenuList>
       </NavigationMenu>
     </header>

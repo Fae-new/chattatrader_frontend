@@ -18,24 +18,26 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null; // prevent SSR mismatch
+  if (!mounted) return null;
 
   return (
-    <div className='min-h-screen bg-[#060b1a]'>
+    <div className='min-h-screen bg-white'>
       <LandingNav />
-      <div className='md:pr-[50px] md:pl-[50px]'>
-        <Hero />
-        <About />
-        <HowItWorks />
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <main className='space-y-8'>
+          <Hero />
+          <About />
+          <HowItWorks />
+        </main>
+        <div className='space-y-8'>
+          <Cta />
+          <Banner />
+          <Pricing />
+          <Services />
+          <Features />
+          <FAQ />
+        </div>
       </div>
-      <Cta />
-      <Banner />
-      <div className='md:pr-[50px] md:pl-[50px]'>
-        <Pricing />
-        <Services />
-        <Features />
-      </div>
-      <FAQ />
       <Footer />
     </div>
   );

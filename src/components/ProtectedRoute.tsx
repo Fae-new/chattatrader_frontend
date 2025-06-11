@@ -6,17 +6,17 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
   if (!isAuthenticated) {
     return <Navigate to='/' state={{ from: location.pathname }} replace />;
   }
-  if (!user?.isVerified) {
-    return (
-      <Navigate to='/verify-otp' state={{ from: location.pathname }} replace />
-    );
-  }
+  // if (!user?.isVerified) {
+  //   return (
+  //     <Navigate to='/verify-otp' state={{ from: location.pathname }} replace />
+  //   );
+  // }
 
   return <>{children}</>;
 };

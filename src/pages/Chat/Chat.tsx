@@ -294,7 +294,7 @@ export default function ChatPage() {
   return (
     <>
       <button
-        className='lg:hidden top-2 right-2 mb-4 fixed p-2 bg-[#007b83] text-white rounded hover:bg-cyan-700 z-10'
+        className='lg:hidden top-2 right-2 mb-4 fixed p-2 bg-[#007b83] text-white rounded hover:bg-cyan-700 z-10 cursor-pointer'
         onClick={() => setIsChatsOpen(!isChatsOpen)}
       >
         <FaComments size={20} />
@@ -325,7 +325,7 @@ export default function ChatPage() {
                   />
                   <button
                     onClick={handleSendAudio}
-                    className='p-2 text-white bg-cyan-600 rounded-full hover:bg-cyan-700'
+                    className='p-2 text-white bg-cyan-600 rounded-full hover:bg-cyan-700 cursor-pointer'
                   >
                     <FaPaperPlane />
                   </button>
@@ -364,7 +364,7 @@ export default function ChatPage() {
 
             <div className='flex items-center gap-2'>
               <button
-                className={`p-3 rounded-full ${
+                className={`p-3 cursor-pointer rounded-full ${
                   isRecording
                     ? 'bg-red-600 text-white'
                     : 'bg-gray-200 text-gray-700'
@@ -377,14 +377,14 @@ export default function ChatPage() {
               </button>
 
               <button
-                className='bg-gray-200 text-gray-700 p-3 rounded-full hover:bg-gray-300 transition-colors duration-200 flex-shrink-0'
+                className='bg-gray-200 text-gray-700 p-3 rounded-full hover:bg-gray-300 transition-colors duration-200 flex-shrink-0 cursor-pointer'
                 onClick={triggerImageUpload}
               >
                 <FaImage />
               </button>
 
               <button
-                className={`p-3 rounded-full ${
+                className={`p-3 cursor-pointer rounded-full ${
                   input.trim() && !isRecording
                     ? 'bg-cyan-600 text-white hover:bg-cyan-700'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
@@ -408,7 +408,7 @@ export default function ChatPage() {
         `}
         >
           <button
-            className='lg:hidden self-end mb-4 p-2 bg-cyan-600 text-white rounded hover:bg-cyan-700'
+            className='lg:hidden self-end mb-4 p-2 bg-cyan-600 text-white rounded hover:bg-cyan-700 cursor-pointer'
             onClick={() => setIsChatsOpen(false)}
           >
             <FaTimes />

@@ -44,7 +44,7 @@ const TokenDetailsModal: React.FC<TokenDetailsModalProps> = ({
               onClick={() => onCopy(token.symbol, 'Token Symbol')}
               variant='ghost'
               size='sm'
-              className='p-1 h-auto hover:bg-gray-100'
+              className='p-1 h-auto hover:bg-gray-100 cursor-pointer'
               aria-label='Copy token symbol'
             >
               {copiedText === 'Token Symbol' ? (
@@ -68,7 +68,7 @@ const TokenDetailsModal: React.FC<TokenDetailsModalProps> = ({
                 onClick={() => onCopy(token.id, 'Contract Address')}
                 variant='ghost'
                 size='sm'
-                className='p-1 h-auto hover:bg-gray-100'
+                className='p-1 h-auto hover:bg-gray-100 cursor-pointer'
                 aria-label='Copy contract address'
               >
                 {copiedText === 'Contract Address' ? (
@@ -104,14 +104,14 @@ const TokenDetailsModal: React.FC<TokenDetailsModalProps> = ({
         <div className='flex gap-3 pt-2'>
           <Button
             variant='outline'
-            className='flex-1 font-medium'
+            className='flex-1 font-medium cursor-pointer'
             onClick={onSell}
           >
             <ArrowDownRight className='mr-1.5 h-4 w-4' />
             Sell
           </Button>
           <Button
-            className='flex-1 font-medium bg-[#FF9500] hover:bg-[#FF9500]/90 text-white'
+            className='flex-1 font-medium bg-[#FF9500] hover:bg-[#FF9500]/90 text-white cursor-pointer'
             onClick={onBuy}
           >
             <ArrowUpRight className='mr-1.5 h-4 w-4' />

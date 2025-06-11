@@ -111,7 +111,7 @@ const TokenInfoMessage: React.FC<TokenInfoMessageProps> = ({ token }) => {
             </span>
             <button
               onClick={handleCopy}
-              className='ml-2 text-white hover:text-yellow-400 focus:outline-none flex-shrink-0'
+              className='cursor-pointer ml-2 text-white hover:text-yellow-400 focus:outline-none flex-shrink-0'
             >
               {isCopied ? <FaCheck /> : <FaRegCopy />}
             </button>

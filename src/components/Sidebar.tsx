@@ -60,7 +60,7 @@ export default function Sidebar() {
               Chatta<span className='text-cyan-600'>Trader</span>
             </h1>
             <button
-              className='md:hidden p-2 text-gray-700 hover:text-cyan-600'
+              className='md:hidden p-2 text-gray-700 hover:text-cyan-600 cursor-pointer'
               onClick={toggleSidebar}
             >
               {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
@@ -109,7 +109,7 @@ export default function Sidebar() {
           </Link>
           <button
             onClick={handleLogout}
-            className='flex items-center gap-2 text-sm text-gray-700 hover:text-red-500 px-3 py-2 w-full'
+            className='flex items-center gap-2 text-sm text-gray-700 hover:text-red-500 px-3 py-2 w-full cursor-pointer'
           >
             <FaSignOutAlt /> Logout
           </button>
@@ -136,7 +136,7 @@ export default function Sidebar() {
 
       {!isOpen && (
         <button
-          className='md:hidden fixed top-2 left-2 z-50 p-2 bg-[#007b83] text-white rounded'
+          className='md:hidden fixed top-2 left-2 z-50 p-2 bg-[#007b83] text-white rounded cursor-pointer'
           onClick={toggleSidebar}
         >
           <FaBars size={17} />

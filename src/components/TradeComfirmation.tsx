@@ -162,7 +162,11 @@ const TradeConfirmation: React.FC<TradeConfirmationProps> = ({
         <div className='text-sm mb-2'>Address</div>
         <div className='flex items-center justify-between bg-white text-black rounded-md px-3 py-2'>
           <span className='truncate text-sm'>{address}</span>
-          <button onClick={copyToClipboard} title='Copy address'>
+          <button
+            onClick={copyToClipboard}
+            className='cursor-pointer'
+            title='Copy address'
+          >
             {copyIconSwitch ? (
               <FaCheckCircle className='text-green-400' />
             ) : (
@@ -212,11 +216,14 @@ const TradeConfirmation: React.FC<TradeConfirmationProps> = ({
         <div className='flex justify-between'>
           <button
             onClick={handleConfirm}
-            className='bg-orange-400 text-white px-4 py-2 rounded-md font-medium hover:bg-orange-500 transition-all'
+            className='bg-orange-400 text-white px-4 py-2 rounded-md font-medium hover:bg-orange-500 transition-all cursor-pointer'
           >
             Yes, I'm Sure
           </button>
-          <button onClick={onCancel} className='text-gray-600 hover:underline'>
+          <button
+            onClick={onCancel}
+            className='text-gray-600 hover:underline cursor-pointer'
+          >
             Cancel
           </button>
         </div>

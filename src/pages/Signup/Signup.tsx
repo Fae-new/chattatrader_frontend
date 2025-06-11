@@ -59,7 +59,7 @@ export default function Signup() {
 
   const PasswordInput = ({
     id,
-    field,
+    field, // <-- from Formik's <Field>
     show,
     toggle,
     placeholder,

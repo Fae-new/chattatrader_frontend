@@ -20,7 +20,7 @@ const Input: React.FC<FormInputProps> = ({
   onBlur,
   required = false,
   type = 'text',
-  placeholder = '',
+  placeholder,
   ...props
 }) => {
   const [field, meta] = useField(props.name);
@@ -38,13 +38,13 @@ const Input: React.FC<FormInputProps> = ({
       </label>
       <div className='relative'>
         <input
-          {...field}
           {...props}
+          {...field}
           id={id || props.name}
           type={inputType}
-          placeholder={placeholder || ''}
+          placeholder={placeholder}
           required={required}
-          className={`w-full h-[45px] border rounded-[8px] px-3 pr-10 text-black focus:outline-none focus:ring-2 ${
+          className={`w-full h-[45px] border rounded-[8px] px-3 pr-10 focus:outline-none focus:ring-2 ${
             meta.touched && meta.error
               ? 'border-red-500 focus:ring-red-400'
               : 'border-[#32405466] focus:ring-[#0487E2]'
