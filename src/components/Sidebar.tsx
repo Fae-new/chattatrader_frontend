@@ -29,7 +29,7 @@ const navLinks = [
   {
     label: 'Trade',
     icon: <FaChartLine className='inline' />,
-    path: '/app/trade',
+    path: '/app/manual-trading',
   },
   {
     label: 'History',

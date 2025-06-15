@@ -17,7 +17,6 @@ import Wallet from './pages/wallet/wallet';
 import Trading from './pages/Trading/trading';
 
 export const router = createBrowserRouter([
-  // Home route with PlainLayout
   {
     path: '/',
     element: <PlainLayout />,
@@ -31,11 +30,7 @@ export const router = createBrowserRouter([
       { path: 'verify-otp', element: <VerifyOtp /> },
     ],
   },
-  {
-    path: '/trading',
-    element: <Trading />,
-  },
-  // Routes with SidebarLayout (main app routes)
+
   {
     path: '/app',
     element: (
@@ -54,6 +49,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <About />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'manual-trading',
+        element: (
+          <ProtectedRoute>
+            <Trading />
           </ProtectedRoute>
         ),
       },
