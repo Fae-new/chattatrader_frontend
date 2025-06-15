@@ -89,15 +89,15 @@ function Modal({
 
   return (
     <div className='fixed inset-0 bg-black/30 flex justify-center items-center z-50'>
-      <div className='bg-white max-h-[80vh] overflow-y-auto rounded-xl p-6 w-full max-w-sm shadow-lg space-y-4 mx-4 relative'>
+      <div className='bg-white max-h-[80vh] overflow-y-auto rounded-xl p-4 sm:p-6 w-full max-w-sm shadow-lg space-y-4 mx-4 relative'>
         <div className='flex justify-between items-center'>
-          <h2 className='text-lg font-semibold'>{title}</h2>
+          <h2 className='text-base sm:text-lg font-semibold'>{title}</h2>
           <button
             onClick={onClose}
             className='text-gray-500 hover:text-gray-700 focus:outline-none'
             aria-label='Close modal'
           >
-            <FaTimes className='w-5 h-5' />
+            <FaTimes className='w-4 h-4 sm:w-5 sm:h-5' />
           </button>
         </div>
         {children}
@@ -197,8 +197,8 @@ export default function Trading() {
   const getBalance = (symbol: string) =>
     mockBalances[symbol as keyof typeof mockBalances] || 0;
 
-  const getTokenBySymbolAndChain = (symbol: string, chain: string) =>
-    cryptos.find((c) => c.symbol === symbol && c.chain === chain);
+  // const getTokenBySymbolAndChain = (symbol: string, chain: string) =>
+  //   cryptos.find((c) => c.symbol === symbol && c.chain === chain);
 
   const getNativeTokenForChain = (chain: string) => {
     const nativeSymbol =
@@ -320,16 +320,16 @@ export default function Trading() {
 
       <div className='relative z-10 px-4 py-2 sm:py-4'>
         <div className='max-w-md mx-auto'>
-          <h1 className='text-2xl font-semibold mb-6 text-center'>
+          <h1 className='text-lg sm:text-xl md:text-2xl font-semibold mb-4 sm:mb-6 text-center'>
             Manual Trading
           </h1>
 
-          <div className='bg-white p-6 rounded-2xl shadow-xl space-y-6 border border-gray-200'>
+          <div className='bg-white p-4 sm:p-6 rounded-2xl shadow-xl space-y-4 sm:space-y-6 border border-gray-200'>
             {/* Buy/Sell Toggle inside the card */}
             <div className='flex gap-2 bg-gray-100 p-1 rounded-lg'>
               <button
                 onClick={() => setBuyMode(1)}
-                className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex-1 px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                   buyMode === 1
                     ? 'bg-white text-gray-900 shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'
@@ -339,7 +339,7 @@ export default function Trading() {
               </button>
               <button
                 onClick={() => setBuyMode(0)}
-                className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex-1 px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                   buyMode === 0
                     ? 'bg-white text-gray-900 shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'
@@ -352,7 +352,7 @@ export default function Trading() {
             <div className='space-y-4'>
               <div className='flex space-x-4'>
                 <div className='flex-1'>
-                  <label className='block text-sm font-medium mb-1'>
+                  <label className='block text-xs sm:text-sm font-medium mb-1'>
                     {buyMode === 1 ? 'Buy' : 'Sell'}
                   </label>
                   <button
@@ -380,7 +380,7 @@ export default function Trading() {
                 </div>
 
                 <div className='flex-1'>
-                  <label className='block text-sm font-medium mb-1'>
+                  <label className='block text-xs sm:text-sm font-medium mb-1'>
                     {buyMode === 1 ? 'Sell' : 'Buy'}
                   </label>
                   <button
@@ -414,8 +414,8 @@ export default function Trading() {
                 </div>
               </div>
 
-              <div className='bg-gray-100 p-4 rounded-md border border-gray-200'>
-                <label className='block text-sm font-medium mb-1'>
+              <div className='bg-gray-100 p-3 sm:p-4 rounded-md border border-gray-200'>
+                <label className='block text-xs sm:text-sm font-medium mb-1'>
                   {buyMode === 1
                     ? `Amount (${formData.fromSymbol || 'token'})`
                     : 'Percentage to sell (%)'}
@@ -448,11 +448,11 @@ export default function Trading() {
               </div>
 
               {/* USD Value Display (Read-only) */}
-              <div className='bg-gray-50 p-4 rounded-md border border-gray-200'>
-                <label className='block text-sm font-medium mb-1'>
+              <div className='bg-gray-50 p-3 sm:p-4 rounded-md border border-gray-200'>
+                <label className='block text-xs sm:text-sm font-medium mb-1'>
                   USD Value
                 </label>
-                <div className='w-full bg-gray-100 text-gray-600 p-2 rounded-md border border-gray-200 text-right font-mono'>
+                <div className='w-full bg-gray-100 text-gray-600 p-2 rounded-md border border-gray-200 text-right font-mono text-sm sm:text-base'>
                   ${usdValue}
                 </div>
                 <p className='text-xs text-gray-500 mt-1'>
@@ -494,10 +494,10 @@ export default function Trading() {
                   >
                     <div className='flex flex-col'>
                       <div className='flex justify-between items-center'>
-                        <span>
+                        <span className='text-sm sm:text-base'>
                           {crypto.name} ({crypto.symbol})
                         </span>
-                        <span className='text-sm text-gray-500'>
+                        <span className='text-xs sm:text-sm text-gray-500'>
                           ${crypto.price.toLocaleString()}
                         </span>
                       </div>
@@ -525,7 +525,7 @@ export default function Trading() {
               <input
                 type='text'
                 placeholder='Search...'
-                className='w-full border border-gray-300 p-2 rounded-md'
+                className='w-full border border-gray-300 p-2 rounded-md text-sm'
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -538,10 +538,10 @@ export default function Trading() {
                   >
                     <div className='flex flex-col'>
                       <div className='flex justify-between items-center'>
-                        <span>
+                        <span className='text-sm sm:text-base'>
                           {crypto.name} ({crypto.symbol})
                         </span>
-                        <span className='text-sm text-gray-500'>
+                        <span className='text-xs sm:text-sm text-gray-500'>
                           ${crypto.price.toLocaleString()}
                         </span>
                       </div>
