@@ -14,6 +14,7 @@ import Settings from './pages/Settings/Settings';
 import ComingSoon from './pages/ComingSoon/ComingSoon';
 import Discover from './pages/discovery/discover';
 import Wallet from './pages/wallet/wallet';
+import Trading from './pages/Trading/trading';
 
 export const router = createBrowserRouter([
   // Home route with PlainLayout
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       { path: 'sign-up', element: <Signup /> },
       { path: 'verify-otp', element: <VerifyOtp /> },
     ],
+  },
+  {
+    path: '/trading',
+    element: <Trading />,
   },
   // Routes with SidebarLayout (main app routes)
   {
