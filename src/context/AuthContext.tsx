@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
    const login = (userData: Partial<User>) => {
     if (userData.token) {
       setToken(userData.token);
-      localStorage.setItem('token', userData.token);
+      localStorage.setItem('token', userData.token); // switching 
       setIsAuthenticated(true);
       setUser(userData); 
     }
