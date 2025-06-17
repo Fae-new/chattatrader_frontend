@@ -1,12 +1,12 @@
-import { createContext, useContext, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { type User } from './types';
-import { mockAuth } from '../lib/mockAuth';
 
 type AuthContextType = {
   user: Partial<User> | null;
-  login: (email: string) => void;
+  login: (user: Partial<User>) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  token: string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -16,21 +16,37 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const isAuthenticated = mockAuth.isAuthenticated();
-  const user = mockAuth.getUser();
+ const [user, setUser] = useState<Partial<User> | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  const login = (email: string) => {
-    mockAuth.login(email);
-    window.location.href = 'app/discover';
+ useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+   const login = (userData: Partial<User>) => {
+    if (userData.token) {
+      setToken(userData.token);
+      localStorage.setItem('token', userData.token);
+      setIsAuthenticated(true);
+      setUser(userData); 
+    }
   };
 
+
   const logout = () => {
-    mockAuth.logout();
-    window.location.href = '/';
+    setUser(null);
+    setToken(null);
+    setIsAuthenticated(false);
+    localStorage.removeItem('token');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, token }}>
       {children}
     </AuthContext.Provider>
   );

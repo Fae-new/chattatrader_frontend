@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Formik, Form, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage, Field } from 'formik';
 import * as Yup from 'yup';
-// import { register, login as loginApi } from '../../api/auth';
+import { login as loginApi, register as registerApi } from '../../api/auth';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { Tabs, TabsList, TabsTrigger } from '../../reuseables/tabs';
 import { Label } from '../../reuseables/label';
@@ -10,7 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import Input from '../../reuseables/input';
 import { Button } from '../../reuseables/button';
 import toast from 'react-hot-toast';
-import { Field } from 'formik';
+import type  {FieldProps, FieldInputProps  } from 'formik';
+
+
 
 const signupValidationSchema = Yup.object({
   username: Yup.string().required('Username is required'),
@@ -32,27 +34,40 @@ export default function Signup() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleApiError = (err: any, fallback: string) => {
-    const msg = err?.response?.data?.message ?? fallback;
-    toast.error(msg);
-  };
-  const handleLoginSubmit = async (vals: any) => {
+ const handleApiError = (err: unknown, fallback: string) => {
+  if (
+    err &&
+    typeof err === 'object' &&
+    'response' in err &&
+    err.response &&
+    typeof err.response === 'object' &&
+    'data' in err.response &&
+    err.response.data &&
+    typeof err.response.data === 'object' &&
+    'message' in err.response.data
+  ) {
+    toast.error((err.response.data as { message?: string }).message || fallback);
+  } else {
+    toast.error(fallback);
+  }
+};
+  const handleLoginSubmit = async (vals: { email: string; password: string}) => {
     try {
-      // Using mock auth instead of real API during development
-      login(vals.email);
+     const user = await loginApi(vals)
+      login(user);
       toast.success('Login successful!');
-      navigate('/');
+      navigate('/app/discover');
     } catch (e) {
       handleApiError(e, 'Login failed');
     }
   };
-  const handleSignupSubmit = async (vals: any) => {
+  const handleSignupSubmit = async (vals: { username: string; email: string; password: string; }) => {
     try {
-      // Using mock auth during development
-      login(vals.email); // Auto-login after signup for development
+      const { username, email, password } = vals;    
+      await registerApi({ username, email, password});
       toast.success('Signup successful!');
-      navigate('/'); // Go directly to home for development
-    } catch (e) {
+       navigate(`/verify-otp?email=${encodeURIComponent(email)}`);
+    } catch (e: unknown) {
       handleApiError(e, 'Signup failed');
     }
   };
@@ -65,7 +80,7 @@ export default function Signup() {
     placeholder,
   }: {
     id: string;
-    field: any;
+    field: FieldInputProps<string>;
     show: boolean;
     toggle: () => void;
     placeholder?: string;
@@ -102,7 +117,7 @@ export default function Signup() {
         validationSchema={loginValidationSchema}
         onSubmit={handleLoginSubmit}
       >
-        {({ values, handleChange, handleBlur, isSubmitting }) => (
+        {({ isSubmitting }) => (
           <Form className='space-y-4'>
             <div>
               <Label htmlFor='email' className='block text-left mb--1'>
@@ -110,14 +125,11 @@ export default function Signup() {
               </Label>
               <Input
                 label=''
-                id='email'
-                name='email'
-                type='email'
-                placeholder='Enter your email'
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
+               id='email'
+               name='email'
+               type='email'
+               placeholder='Enter your email'
+             />
               <ErrorMessage
                 name='email'
                 component='div'
@@ -129,16 +141,16 @@ export default function Signup() {
                 Password
               </Label>
               <Field name='password'>
-                {({ field }: any) => (
-                  <PasswordInput
-                    id='password'
-                    field={field}
-                    show={showPassword}
-                    toggle={() => setShowPassword(!showPassword)}
-                    placeholder='Enter your password'
-                  />
-                )}
-              </Field>
+              {({ field }: FieldProps) => (
+                <PasswordInput
+                  id='password'
+                  field={field}
+                  show={showPassword}
+                  toggle={() => setShowPassword(!showPassword)}
+                  placeholder='Enter your password'
+                />
+              )}
+            </Field>
               <ErrorMessage
                 name='password'
                 component='div'
@@ -165,29 +177,25 @@ export default function Signup() {
     return (
       <Formik
         initialValues={{
-          username: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-        }}
-        validationSchema={signupValidationSchema}
-        onSubmit={handleSignupSubmit}
-      >
-        {({ values, handleChange, handleBlur, isSubmitting }) => (
+         username: '',
+         email: '',
+         password: '',
+        confirmPassword: '',
+      }}
+      validationSchema={signupValidationSchema}
+      onSubmit={handleSignupSubmit}>
+        {({  isSubmitting }) => (
           <Form className='space-y-4'>
             <div>
               <Label htmlFor='username' className='block text-left mb-1'>
                 Username
               </Label>
-              <Input
-                label=''
+               <Input
+                 label=''
                 id='username'
                 name='username'
                 type='text'
-                placeholder='Enter your username'
-                value={values.username}
-                onChange={handleChange}
-                onBlur={handleBlur}
+               placeholder='Enter your username'
               />
               <ErrorMessage
                 name='username'
@@ -197,19 +205,16 @@ export default function Signup() {
             </div>
 
             <div>
-              <Label htmlFor='email' className='block text-left mb-1'>
-                Email
-              </Label>
-              <Input
-                label=''
-                id='email'
-                name='email'
-                type='email'
-                placeholder='Enter your email'
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
+             <Label htmlFor='email' className='block text-left mb-1'>
+               Email
+             </Label>
+             <Input
+               label=''
+               id='email'
+              name='email'
+              type='email'
+              placeholder='Enter your email'
+            />
               <ErrorMessage
                 name='email'
                 component='div'
@@ -218,20 +223,20 @@ export default function Signup() {
             </div>
 
             <div>
-              <Label htmlFor='password' className='block text-left mb-1'>
-                Password
-              </Label>
+             <Label htmlFor='password' className='block text-left mb-1'>
+               Password
+             </Label>
               <Field name='password'>
-                {({ field }: any) => (
-                  <PasswordInput
-                    id='password'
-                    field={field}
-                    show={showSignupPassword}
-                    toggle={() => setShowSignupPassword(!showSignupPassword)}
-                    placeholder='Create a password'
-                  />
-                )}
-              </Field>
+                {({ field }: FieldProps) => (
+              <PasswordInput
+                id='password'
+                field={field}
+                show={showSignupPassword}
+                toggle={() => setShowSignupPassword(!showSignupPassword)}
+                placeholder='Create a password'
+              />
+             )}
+           </Field>
               <ErrorMessage
                 name='password'
                 component='div'
@@ -240,20 +245,20 @@ export default function Signup() {
             </div>
 
             <div>
-              <Label htmlFor='confirmPassword' className='block text-left mb-1'>
-                Confirm Password
-              </Label>
-              <Field name='confirmPassword'>
-                {({ field }: any) => (
-                  <PasswordInput
-                    id='confirmPassword'
-                    field={field}
-                    show={showConfirmPassword}
-                    toggle={() => setShowConfirmPassword(!showConfirmPassword)}
-                    placeholder='Confirm your password'
-                  />
-                )}
-              </Field>
+             <Label htmlFor='confirmPassword' className='block text-left mb-1'>
+              Confirm Password
+             </Label>
+           <Field name='confirmPassword'>
+             {({ field }: FieldProps) => (
+              <PasswordInput
+                id='confirmPassword'
+                field={field}
+                show={showConfirmPassword}
+                toggle={() => setShowConfirmPassword(!showConfirmPassword)}
+               placeholder='Confirm your password'
+              />
+            )}
+           </Field>
               <ErrorMessage
                 name='confirmPassword'
                 component='div'
