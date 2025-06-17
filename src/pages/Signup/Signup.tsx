@@ -56,7 +56,7 @@ export default function Signup() {
      const user = await loginApi(vals)
       login(user);
       toast.success('Login successful!');
-      navigate('/sign-up');
+      navigate('/app/discover');
     } catch (e) {
       handleApiError(e, 'Login failed');
     }
