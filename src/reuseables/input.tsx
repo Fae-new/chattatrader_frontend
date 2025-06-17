@@ -7,17 +7,12 @@ interface FormInputProps {
   id?: string;
   type?: string;
   placeholder?: string;
-  value: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   required?: boolean;
 }
 
 const Input: React.FC<FormInputProps> = ({
   label,
   id,
-  onChange,
-  onBlur,
   required = false,
   type = 'text',
   placeholder,
@@ -61,6 +56,9 @@ const Input: React.FC<FormInputProps> = ({
           </button>
         )}
       </div>
+      {meta.touched && meta.error && (
+        <div className="text-red-500 text-sm mt-1">{meta.error}</div>
+      )}
     </div>
   );
 };

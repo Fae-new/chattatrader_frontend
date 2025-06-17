@@ -1,10 +1,10 @@
-import { createContext, useContext, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 import { type User } from './types';
 import { mockAuth } from '../lib/mockAuth';
 
 type AuthContextType = {
   user: Partial<User> | null;
-  login: (email: string) => void;
+  login: (user: Partial<User>) => void;
   logout: () => void;
   isAuthenticated: boolean;
 };
@@ -16,16 +16,22 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const isAuthenticated = mockAuth.isAuthenticated();
-  const user = mockAuth.getUser();
+  const [user, setUser] = useState<Partial<User> | null>(mockAuth.getUser())
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(mockAuth.isAuthenticated());
 
-  const login = (email: string) => {
-    mockAuth.login(email);
-    window.location.href = 'app/discover';
+
+ const login = (userData: Partial<User>) => {
+    mockAuth.login(userData.email || '');
+    setUser(userData);
+    setIsAuthenticated(true);
+    window.location.href = '/app/discover';
   };
 
-  const logout = () => {
+
+   const logout = () => {
     mockAuth.logout();
+    setUser(null);
+    setIsAuthenticated(false);
     window.location.href = '/';
   };
 

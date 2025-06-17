@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate} from 'react-router-dom';
+import { verifyCode, requestCode } from '../../api/auth';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { Card, CardContent } from '../../reuseables/Card';
 import {
@@ -11,6 +12,7 @@ import {
 } from '../../reuseables/input-otp';
 import { Label } from '../../reuseables/label';
 import { Button } from '../../reuseables/button';
+import toast from 'react-hot-toast';
 
 const otpValidationSchema = Yup.object({
   otp: Yup.string()
@@ -21,20 +23,20 @@ const otpValidationSchema = Yup.object({
 
 const VerifyOtp: React.FC = () => {
   const navigate = useNavigate();
-  // const email = new URLSearchParams(window.location.search).get('email');
+  const email = new URLSearchParams(window.location.search).get('email');
   const [error, setError] = useState<string>('');
   const [isResending, setIsResending] = useState<boolean>(false);
 
-  // if (!email) {
-  //   return <Navigate to="/signup" replace />;
-  // }
+  if (!email) {
+    return <Navigate to="/signup" replace />;
+  }
 
   const handleResendOTP = async () => {
     setError('');
     setIsResending(true);
     try {
-      //  handle API
-      // toast.success('OTP resent successfully!');
+      await requestCode({ email });
+      toast.success("OTP resent successfully!");
     } catch (err: unknown) {
       setError('Failed to resend OTP. Please try again.');
     } finally {
@@ -67,14 +69,14 @@ const VerifyOtp: React.FC = () => {
               <Formik
                 initialValues={{ otp: '' }}
                 validationSchema={otpValidationSchema}
-                onSubmit={async (_values, { setSubmitting }) => {
+                onSubmit={async (values, { setSubmitting }) => {
                   setError('');
                   try {
-                    navigate('/'); // On success
+                    await verifyCode({ code: values.otp, email})
+                    navigate('/sign-up'); 
                   } catch (err: unknown) {
                     console.error(err);
                     setError('Failed to verify code. Please try again.');
-                    // handleError?.(err); // Optionally call a global error handler
                   }
                   setSubmitting(false);
                 }}
