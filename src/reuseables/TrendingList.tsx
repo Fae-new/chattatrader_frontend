@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
 import '../styles/animations.css';
 import type { TrendingToken } from '../pages/discovery/types';
-import { getTrendingTokens } from '../api/tokens';
 
 type Chain = 'solana' | 'ethereum' | 'base';
 
@@ -12,25 +11,28 @@ type TrendingListProps = {
   chain: Chain;
   onDetails: (token: TrendingToken) => void;
   onTrade: (token: TrendingToken) => void;
+  loading?: boolean;
+  tokens?: TrendingToken[];
 };
 
 export const TrendingList: React.FC<TrendingListProps> = ({
   chain,
   onDetails,
   onTrade,
+  loading = false,
+  tokens
 }) => {
   const [items, setItems] = useState<TrendingToken[]>([]);
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    getTrendingTokens(chain)
-     .then((res) => {
-      setItems(res.data[chain]?.tokens || []);
-    }).catch(() => {
+
+
+ useEffect(() => {
+    if (tokens && tokens.length > 0) {
+      setItems(tokens);
+    } else {
       setItems([]);
-    }).finally(() => setLoading(false));
-  }, [chain]);
+    }
+  }, [tokens, chain]);
 
   const getChainLogo = (chain: string) => {
     switch (chain) {
