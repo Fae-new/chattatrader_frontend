@@ -51,8 +51,13 @@ export type Message = {
 export type Chat = {
   title: string;
   userId: string;
+  ca?: string | null;
+  tradeDetails?: { type: string; amount: string; address: string } | null;
+  isOnTrade?: boolean;
+  caHistory?: { address: string; name: string; mcap: number }[];
   chatId: string;
   messages: Message[];
+  createdAt?: string;
 };
 
 export const sampleChats: Chat[] = [
