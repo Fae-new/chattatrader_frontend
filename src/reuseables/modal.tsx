@@ -27,7 +27,7 @@ export const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
         </button>
         {/* <h2 className="text-xl font-semibold mb-4">{title}</h2> */}
         <div>{children}</div>
-      </motion.div>
+      </motion.div> 
     </div>
   );
 };

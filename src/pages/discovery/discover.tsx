@@ -130,24 +130,25 @@ const Discover: React.FC = () => {
 
 
 useEffect(() => {
-  const fetchTrending = async () => {
-    setTrendingLoading(true);
-    try {
-      const res = await getTrendingTokens();
-      setTrendingTokens(res.data);
-    } catch (error) {
-      setTrendingTokens({
-        solana: { tokens: [] },
-        ethereum: { tokens: [] },
-        base: { tokens: [] }
-      });
-    } finally {
-      setTrendingLoading(false);
-    }
-  };
-
+ const fetchTrending = async () => {
+  setTrendingLoading(true);
+  try {
+    const res = await getTrendingTokens(); 
+    setTrendingTokens(res.data);
+  } catch (error) {
+    setTrendingTokens({
+      solana: { tokens: [] },
+      ethereum: { tokens: [] },
+      base: { tokens: [] }
+    });
+  } finally {
+    setTrendingLoading(false);
+  }
+};
   fetchTrending();
 }, [selectedChain]);
+
+if (loading) return <div className="text-gray-600">No Discovery Found</div>
 
   return (
     <div className='pt-2 px-4 md:px-6 lg:px-10 space-y-6 bg-[#FFFFFF] min-h-screen'>
