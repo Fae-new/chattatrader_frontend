@@ -1,41 +1,49 @@
-// src/components/TrendingList.tsx
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from './Card';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
 import '../styles/animations.css';
 import type { TrendingToken } from '../pages/discovery/types';
+import { getTrendingTokens } from '../api/tokens';
 
-interface Props {
-  chain: 'solana' | 'ethereum' | 'base';
-  loading: boolean;
-  onDetails: (item: TrendingToken) => void;
-  onTrade: (item: TrendingToken) => void;
-}
+type Chain = 'solana' | 'ethereum' | 'base';
 
-export const TrendingList: React.FC<Props> = ({
+type TrendingListProps = {
+  chain: Chain;
+  onDetails: (token: TrendingToken) => void;
+  onTrade: (token: TrendingToken) => void;
+};
+
+export const TrendingList: React.FC<TrendingListProps> = ({
   chain,
-  loading,
   onDetails,
   onTrade,
 }) => {
   const [items, setItems] = useState<TrendingToken[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Mock data generation
-    const dummyData: TrendingToken[] = Array.from({ length: 4 }, (_, i) => ({
-      address: `0x${Math.random().toString(16).slice(2, 42)}`,
-      decimals: 18,
-      liquidity: Math.random() * 10_000_000,
-      logoURI: getChainLogo(chain),
-      name: `${chain.toUpperCase()} Token ${i + 1}`,
-      symbol: `${chain.slice(0, 3).toUpperCase()}${i + 1}`,
-      volume24hUSD: Math.random() * 5_000_000,
-      rank: i + 1,
-    }));
-
-    setItems(dummyData);
+    setLoading(true);
+    getTrendingTokens(chain)
+     .then((res) => {
+      setItems(res.data[chain]?.tokens || []);
+    }).catch(() => {
+      setItems([]);
+    }).finally(() => setLoading(false));
   }, [chain]);
+
+  const getChainLogo = (chain: string) => {
+    switch (chain) {
+      case 'solana':
+        return '/images/solana.png';
+      case 'ethereum':
+        return '/images/shiba.svg';
+      case 'base':
+        return '/images/shiba.svg';
+      default:
+        return '/images/shiba.svg';
+    }
+  };
 
   if (loading) {
     return (
@@ -78,19 +86,6 @@ export const TrendingList: React.FC<Props> = ({
     );
   }
 
-  const getChainLogo = (chain: string) => {
-    switch (chain) {
-      case 'solana':
-        return '/images/solana.png';
-      case 'ethereum':
-        return '/images/shiba.svg';
-      case 'base':
-        return '/images/shiba.svg';
-      default:
-        return '/images/shiba.svg';
-    }
-  };
-
   return (
     <AnimatePresence mode='wait'>
       <motion.div
@@ -106,7 +101,7 @@ export const TrendingList: React.FC<Props> = ({
             transition={{
               duration: 0.4,
               delay: index * 0.1,
-              ease: [0.23, 1, 0.32, 1], // Custom easing for smoother animation
+              ease: [0.23, 1, 0.32, 1],
             }}
           >
             <Card className='bg-white text-sm text-gray-700 w-full overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1'>
@@ -118,11 +113,17 @@ export const TrendingList: React.FC<Props> = ({
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <img
-                      src={item.logoURI}
-                      alt={item.symbol}
-                      className='w-full h-full rounded-full object-cover shadow-sm'
-                    />
+                  <img
+                    src={item.logoURI && item.logoURI.trim() ? item.logoURI : getChainLogo(chain)}
+                    alt={item.symbol}
+                    className='w-full h-full rounded-full object-cover shadow-sm'
+                    onError={(e) => {
+                       const target = e.currentTarget as HTMLImageElement;
+                       if (target.src !== window.location.origin + getChainLogo(chain)) {
+                          target.src = getChainLogo(chain);
+                        }
+                       }}
+                     />
                     <div className='absolute -bottom-1 -right-1 bg-[#007b83] text-white text-[10px] px-1.5 py-0.5 rounded-full'>
                       #{item.rank}
                     </div>
