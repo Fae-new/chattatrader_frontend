@@ -1,9 +1,18 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from 'react';
 import { type User } from './types';
 
 type AuthContextType = {
   user: Partial<User> | null;
-  login: (user: Partial<User>) => void;
+  login: (userData: {
+    userWithoutPassword: Partial<User>;
+    token: string;
+  }) => void;
   logout: () => void;
   isAuthenticated: boolean;
   token: string | null;
@@ -16,11 +25,11 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
- const [user, setUser] = useState<Partial<User> | null>(null);
+  const [user, setUser] = useState<Partial<User> | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
- useEffect(() => {
+  useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       setToken(storedToken);
@@ -28,15 +37,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
-   const login = (userData: Partial<User>) => {
+  const login = (userData: {
+    userWithoutPassword: Partial<User>;
+    token: string;
+  }) => {
     if (userData.token) {
       setToken(userData.token);
-      localStorage.setItem('token', userData.token); // switching 
+      localStorage.setItem('token', userData.token);
       setIsAuthenticated(true);
-      setUser(userData); 
+      setUser(userData.userWithoutPassword);
     }
   };
-
 
   const logout = () => {
     setUser(null);
@@ -46,7 +57,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, token }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, isAuthenticated, token }}
+    >
       {children}
     </AuthContext.Provider>
   );

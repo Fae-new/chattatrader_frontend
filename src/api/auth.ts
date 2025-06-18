@@ -19,11 +19,19 @@ type RequestCodeRequest = {
 type VerifyCodeRequest = {
   code: string;
   email: string;
-}
+};
 
-export const login = async (data: LoginRequest): Promise<Partial<User>> => {
+export const login = async (
+  data: LoginRequest
+): Promise<{
+  userWithoutPassword: Partial<User>;
+  token: string;
+}> => {
   return instance
-    .post<Partial<User>>('/users/login', data)
+    .post<{
+      userWithoutPassword: Partial<User>;
+      token: string;
+    }>('/users/login', data)
     .then((res) => res.data);
 };
 
@@ -33,10 +41,9 @@ export const register = async (
   return instance.post<User>('/users/register', data).then((res) => res.data);
 };
 
-
 export const requestCode = async (data: RequestCodeRequest): Promise<void> => {
-   await instance.post('/verification/requestcode', data);
-}
+  await instance.post('/verification/requestcode', data);
+};
 
 export const verifyCode = async (data: VerifyCodeRequest): Promise<void> => {
   await instance.post('/verification/verifycode', data);
