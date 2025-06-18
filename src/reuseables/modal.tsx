@@ -18,11 +18,12 @@ export const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
         transition={{ duration: 0.2 }}
         className='bg-white rounded-[8px] shadow-lg w-full max-w-2xl p-5 relative text-gray-800 max-h-[90vh] overflow-hidden'
       >
-        <button
+         <button
           onClick={onClose}
-          className='absolute top-3 right-3 text-gray-400 hover:text-gray-600'
+          className="absolute top-4 right-4 p-2 rounded-full bg-white shadow hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition-colors z-10"
+          aria-label="Close modal"
         >
-          <X size={20} />
+          <X size={24} />
         </button>
         {/* <h2 className="text-xl font-semibold mb-4">{title}</h2> */}
         <div>{children}</div>

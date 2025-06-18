@@ -13,6 +13,7 @@ import {
 } from '../../reuseables/tabs';
 
 import type { TrendingToken, TokenData } from './types';
+import { getTrendingTokens, getTokenDetails } from '../../api/tokens';
 import { SearchIcon } from 'lucide-react';
 
 type Chain = 'solana' | 'ethereum' | 'base';
@@ -27,6 +28,16 @@ const Discover: React.FC = () => {
     null
   );
   const [loading, setLoading] = useState(false);
+  const [trendingTokens, setTrendingTokens] = useState<{
+    solana: { tokens: TrendingToken[] };
+    ethereum: { tokens: TrendingToken[] };
+    base: { tokens: TrendingToken[] };
+  }>({
+    solana: { tokens: [] },
+    ethereum: { tokens: [] },
+    base: { tokens:  []}
+  });
+  const [trendingLoading, setTrendingLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -92,57 +103,51 @@ const Discover: React.FC = () => {
     }
   };
 
-  // Function to fetch token data
-  const fetchTokenData = async (token: TrendingToken) => {
-    setTokenDetailsLoading(true);
+ 
+ const fetchTokenData = async (token: TrendingToken) => {
+  setTokenDetailsLoading(true);
+  try {
+    const res = await getTokenDetails(token.address);
+    setTokenData(res.data?.token ?? null); 
+  } catch (error) {
+    setTokenData(null);
+    console.error('Error fetching token data:', error);
+  } finally {
+    setTokenDetailsLoading(false);
+  }
+};
+
+
+
+  useEffect(() => {
+  if (showDetails) {
+    setTokenData(null); 
+   fetchTokenData(showDetails);
+  } else {
+    setTokenData(null);
+  }
+}, [showDetails]);
+
+
+useEffect(() => {
+  const fetchTrending = async () => {
+    setTrendingLoading(true);
     try {
-      // Simulate API call - replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Mock data - replace with actual API response
-      const mockData: Partial<TokenData> = {
-        address: token.address,
-        decimals: token.decimals,
-        symbol: token.symbol,
-        name: token.name,
-        logoURI: token.logoURI,
-        liquidity: token.liquidity,
-        price: Math.random() * 1000,
-        priceChange24hPercent: Math.random() * 40 - 20,
-        marketCap: Math.random() * 1000000000,
-        extensions: {
-          coingeckoId: 'mock-id',
-          serumV3Usdc: 'mock-serum',
-          serumV3Usdt: 'mock-serum',
-          website: 'https://example.com',
-          telegram: 'https://t.me/example',
-          twitter: 'https://twitter.com/example',
-          discord: 'https://discord.gg/example',
-          medium: 'https://medium.com/example',
-          description:
-            'This is a mock description for the token. Replace with actual token description from API.',
-        },
-        trade24h: Math.floor(Math.random() * 10000),
-        uniqueWallet24h: Math.floor(Math.random() * 5000),
-        // ... other fields ...
-      };
-
-      setTokenData(mockData);
+      const res = await getTrendingTokens();
+      setTrendingTokens(res.data);
     } catch (error) {
-      console.error('Error fetching token data:', error);
+      setTrendingTokens({
+        solana: { tokens: [] },
+        ethereum: { tokens: [] },
+        base: { tokens: [] }
+      });
     } finally {
-      setTokenDetailsLoading(false);
+      setTrendingLoading(false);
     }
   };
 
-  // Effect to fetch token data when showing details
-  useEffect(() => {
-    if (showDetails) {
-      fetchTokenData(showDetails);
-    } else {
-      setTokenData(null);
-    }
-  }, [showDetails]);
+  fetchTrending();
+}, [selectedChain]);
 
   return (
     <div className='pt-2 px-4 md:px-6 lg:px-10 space-y-6 bg-[#FFFFFF] min-h-screen'>
@@ -212,21 +217,22 @@ const Discover: React.FC = () => {
           </TabsList>
 
           {(['solana', 'ethereum', 'base'] as Chain[]).map((chain) => (
-            <TabsContent key={chain} value={chain}>
-              <AnimatePresence>
-                {selectedChain === chain && (
-                  <TrendingList
-                    chain={chain}
-                    loading={loading}
-                    onDetails={setShowDetails}
-                    onTrade={setShowTradeModal}
-                  />
-                )}
-              </AnimatePresence>
-            </TabsContent>
-          ))}
-        </Tabs>
-      </div>
+           <TabsContent key={chain} value={chain}>
+             <AnimatePresence>
+               {selectedChain === chain && (
+              <TrendingList
+                chain={chain}
+                loading={trendingLoading}
+                tokens={trendingTokens[chain]?.tokens || []}
+                onDetails={setShowDetails}
+                onTrade={setShowTradeModal}
+              />
+            )}
+        </AnimatePresence>
+       </TabsContent>
+      ))}
+     </Tabs>
+    </div>
       {/* Modals */}
       {showTradeModal && tradeAction && (
         <Modal
@@ -310,6 +316,7 @@ const Discover: React.FC = () => {
       {/* Token Details Modal */}
       {showDetails && (
         <TrendingTokenDetails
+          chain={selectedChain}
           token={showDetails}
           tokenData={tokenData ?? null}
           loading={tokenDetailsLoading}

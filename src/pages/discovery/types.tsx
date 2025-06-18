@@ -12,8 +12,8 @@ export interface TokenData {
   address: string;
   decimals: number;
   symbol: string;
-  fdv?: number;
-  marketCap?: number;
+  fdv: number;
+  marketCap: number;
   name: string;
   extensions: {
     coingeckoId: string;
