@@ -34,7 +34,7 @@ const Discover: React.FC = () => {
   }>({
     solana: { tokens: [] },
     ethereum: { tokens: [] },
-    base: { tokens:  []}
+    base: { tokens: [] },
   });
   const [trendingLoading, setTrendingLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -79,15 +79,12 @@ const Discover: React.FC = () => {
   };
 
   const handleChainClick = (chain: Chain) => {
-    console.log(showDetails);
     if (selectedChain === chain) {
       return;
     } else {
       setLoading(true);
-      setTimeout(() => {
-        setSelectedChain(chain);
-        setLoading(false);
-      }, 800); // simulate API loading
+      setSelectedChain(chain);
+      setLoading(false);
     }
   };
 
@@ -102,52 +99,48 @@ const Discover: React.FC = () => {
     }
   };
 
- 
- const fetchTokenData = async (token: TrendingToken) => {
-  setTokenDetailsLoading(true);
-  try {
-    const res = await getTokenDetails(token.address);
-    setTokenData(res.data?.token ?? null); 
-  } catch (error) {
-    setTokenData(null);
-    console.error('Error fetching token data:', error);
-  } finally {
-    setTokenDetailsLoading(false);
-  }
-};
-
-
+  const fetchTokenData = async (token: TrendingToken) => {
+    setTokenDetailsLoading(true);
+    try {
+      const res = await getTokenDetails(token.address);
+      setTokenData(res.data?.token ?? null);
+    } catch (error) {
+      setTokenData(null);
+      console.error('Error fetching token data:', error);
+    } finally {
+      setTokenDetailsLoading(false);
+    }
+  };
 
   useEffect(() => {
-  if (showDetails) {
-    setTokenData(null); 
-   fetchTokenData(showDetails);
-  } else {
-    setTokenData(null);
-  }
-}, [showDetails]);
+    if (showDetails) {
+      setTokenData(null);
+      fetchTokenData(showDetails);
+    } else {
+      setTokenData(null);
+    }
+  }, [showDetails]);
 
+  useEffect(() => {
+    const fetchTrending = async () => {
+      setTrendingLoading(true);
+      try {
+        const res = await getTrendingTokens();
+        setTrendingTokens(res.data);
+      } catch (error) {
+        setTrendingTokens({
+          solana: { tokens: [] },
+          ethereum: { tokens: [] },
+          base: { tokens: [] },
+        });
+      } finally {
+        setTrendingLoading(false);
+      }
+    };
+    fetchTrending();
+  }, [selectedChain]);
 
-useEffect(() => {
- const fetchTrending = async () => {
-  setTrendingLoading(true);
-  try {
-    const res = await getTrendingTokens(); 
-    setTrendingTokens(res.data);
-  } catch (error) {
-    setTrendingTokens({
-      solana: { tokens: [] },
-      ethereum: { tokens: [] },
-      base: { tokens: [] }
-    });
-  } finally {
-    setTrendingLoading(false);
-  }
-};
-  fetchTrending();
-}, [selectedChain]);
-
-if (loading) return <div className="text-gray-600">No Discovery Found</div>
+  if (loading) return <div className='text-gray-600'>No Discovery Found</div>;
 
   return (
     <div className='pt-2 px-4 md:px-6 lg:px-10 space-y-6 bg-[#FFFFFF] min-h-screen'>
@@ -194,7 +187,8 @@ if (loading) return <div className="text-gray-600">No Discovery Found</div>
         {/* Subheading showing selected tab */}
         <p className='text-sm text-[#475569] font-medium'>
           Trending on {getChainLabel(selectedChain)}
-        </p>{' '}
+        </p>
+
         <Tabs
           value={selectedChain}
           onValueChange={(val) => handleChainClick(val as Chain)}
@@ -207,7 +201,7 @@ if (loading) return <div className="text-gray-600">No Discovery Found</div>
                 className={`px-4 py-2 text-sm font-medium transition-all duration-200 ease-out rounded-md relative
                 ${
                   selectedChain === chain
-                    ? 'bg-[#007b83] !bg-[#007b83] !text-white shadow-sm ring-2 ring-[#007b83]/20 scale-[1.02]'
+                    ? 'bg-[#007b83] !text-white shadow-sm ring-2 ring-[#007b83]/20 scale-[1.02]'
                     : 'bg-white text-gray-600 hover:text-[#007b83] hover:bg-[#007b83]/5 hover:scale-[1.02]'
                 }`}
               >
@@ -217,6 +211,7 @@ if (loading) return <div className="text-gray-600">No Discovery Found</div>
           </TabsList>
 
           {(['solana', 'ethereum', 'base'] as Chain[]).map((chain) => (
+
           <TabsContent key={chain} value={chain}>
              {selectedChain === chain && (
               <TrendingList
@@ -231,6 +226,7 @@ if (loading) return <div className="text-gray-600">No Discovery Found</div>
         ))}
        </Tabs>
     </div>
+
       {/* Modals */}
       {showTradeModal && tradeAction && (
         <Modal
