@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Button } from '../../reuseables/button';
 import { Modal } from '../../reuseables/modal';
 import { TrendingList } from '../../reuseables/TrendingList';
-import { AnimatePresence } from 'framer-motion';
 import { SearchResults } from '../../reuseables/SearchResults';
 import { TrendingTokenDetails } from '../../reuseables/TrendingTokenDetails';
 import {
@@ -212,22 +211,22 @@ const Discover: React.FC = () => {
           </TabsList>
 
           {(['solana', 'ethereum', 'base'] as Chain[]).map((chain) => (
-            <TabsContent key={chain} value={chain}>
-              <AnimatePresence>
-                {selectedChain === chain && (
-                  <TrendingList
-                    chain={chain}
-                    loading={trendingLoading}
-                    tokens={trendingTokens[chain]?.tokens || []}
-                    onDetails={setShowDetails}
-                    onTrade={setShowTradeModal}
-                  />
-                )}
-              </AnimatePresence>
-            </TabsContent>
-          ))}
-        </Tabs>
-      </div>
+
+          <TabsContent key={chain} value={chain}>
+             {selectedChain === chain && (
+              <TrendingList
+                chain={chain}
+                loading={trendingLoading}
+                tokens={trendingTokens[chain]?.tokens || []}
+                onDetails={setShowDetails}
+                onTrade={setShowTradeModal}
+              />
+            )}
+          </TabsContent>
+        ))}
+       </Tabs>
+    </div>
+
       {/* Modals */}
       {showTradeModal && tradeAction && (
         <Modal
