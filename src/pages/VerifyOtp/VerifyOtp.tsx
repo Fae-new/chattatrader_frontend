@@ -111,6 +111,7 @@ const VerifyOtp: React.FC = () => {
                       </div>
                       <div className='flex justify-center items-center'>
                         <InputOTP
+                          type="text"
                           maxLength={6}
                           value={values.otp}
                           onChange={(value) => setFieldValue('otp', value)}
