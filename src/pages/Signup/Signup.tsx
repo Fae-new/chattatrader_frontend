@@ -57,6 +57,12 @@ export default function Signup() {
   }) => {
     try {
       const user = await loginApi(vals);
+      // Check if user is verified 
+      if (!user.userWithoutPassword.isVerified) {
+        toast.error('Please verify your email before logging in.');
+        navigate(`/verify-otp?email=${encodeURIComponent(vals.email)}`);
+        return;
+      }
       login(user);
       toast.success('Login successful!');
       navigate('/app/discover');

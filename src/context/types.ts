@@ -5,6 +5,7 @@ export interface User {
   [key: string]: any;
   password: string;
   walletAddress: string;
+  otpVerified?: boolean;
   ethPrivateKey: string;
   ethMnemonic: string;
   baseholding: {
