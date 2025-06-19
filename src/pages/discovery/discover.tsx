@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Button } from '../../reuseables/button';
 import { Modal } from '../../reuseables/modal';
 import { TrendingList } from '../../reuseables/TrendingList';
-import { AnimatePresence } from 'framer-motion';
 import { SearchResults } from '../../reuseables/SearchResults';
 import { TrendingTokenDetails } from '../../reuseables/TrendingTokenDetails';
 import {
@@ -218,9 +217,8 @@ if (loading) return <div className="text-gray-600">No Discovery Found</div>
           </TabsList>
 
           {(['solana', 'ethereum', 'base'] as Chain[]).map((chain) => (
-           <TabsContent key={chain} value={chain}>
-             <AnimatePresence>
-               {selectedChain === chain && (
+          <TabsContent key={chain} value={chain}>
+             {selectedChain === chain && (
               <TrendingList
                 chain={chain}
                 loading={trendingLoading}
@@ -229,10 +227,9 @@ if (loading) return <div className="text-gray-600">No Discovery Found</div>
                 onTrade={setShowTradeModal}
               />
             )}
-        </AnimatePresence>
-       </TabsContent>
-      ))}
-     </Tabs>
+          </TabsContent>
+        ))}
+       </Tabs>
     </div>
       {/* Modals */}
       {showTradeModal && tradeAction && (

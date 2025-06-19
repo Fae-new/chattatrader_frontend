@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '../../reuseables/Card';
 import { Button } from '../../reuseables/button';
 import { Link } from 'react-router-dom';
+import { Modal } from '../../reuseables/modal';
 import NetworkCard from '../../components/NetworkCard';
 import TokenDetailsModal from '../../components/TokenDetailsModal';
 import {
@@ -95,6 +96,7 @@ const Wallet: React.FC = () => {
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null);
   const [loadingToken, setLoadingToken] = useState(false);
   const [copiedText, setCopiedText] = useState<string | null>(null);
+  const [tokenToDelete, setTokenToDelete] = useState<Token | null>(null);
 
   const walletAddress = '0x1234567890abcdef';
   const { user } = useAuth();
@@ -390,6 +392,7 @@ const Wallet: React.FC = () => {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
+                              setTokenToDelete(token);
                               handleDeleteToken(token.id);
                             }}
                             className='p-2 rounded-full hover:bg-gray-200'
@@ -682,6 +685,32 @@ const Wallet: React.FC = () => {
         onCopy={copyToClipboard}
         copiedText={copiedText}
       />
+      {tokenToDelete && (
+  <Modal onClose={() => setTokenToDelete(null)}>
+    <div className="p-6 text-center">
+      <h2 className="text-lg font-semibold mb-2">Delete Token?</h2>
+      <p className="mb-4 text-gray-600">
+        Are you sure you want to delete <span className="font-bold">{tokenToDelete.name}</span>?
+      </p>
+      <div className="flex justify-center gap-4">
+        <button
+          className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700"
+        >
+          Cancel
+        </button>
+        <button
+          className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white"
+          onClick={() => {
+            handleDeleteToken(tokenToDelete.id);
+            setTokenToDelete(null);
+          }}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </Modal>
+)}
     </div>
   );
 };

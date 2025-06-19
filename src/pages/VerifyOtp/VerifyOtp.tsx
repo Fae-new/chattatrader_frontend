@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import * as Yup from 'yup';
 import { useNavigate, Navigate} from 'react-router-dom';
 import { verifyCode, requestCode } from '../../api/auth';
@@ -27,9 +27,20 @@ const VerifyOtp: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [isResending, setIsResending] = useState<boolean>(false);
 
+  // Send OTP on page load 
+  useEffect(() => {
+    if (email) {
+      requestCode({ email }).catch(() => {
+        setError('Failed to send OTP. Please try again.');
+      });
+    }
+  }, [email]);
+
   if (!email) {
     return <Navigate to="/signup" replace />;
   }
+
+  
 
   const handleResendOTP = async () => {
     setError('');

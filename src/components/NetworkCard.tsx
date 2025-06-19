@@ -76,18 +76,18 @@ const NetworkCard: React.FC<NetworkCardProps> = ({
             <span className='font-medium'>{balance}</span>
           </div>
         </div>
-        <div className='mt-4 flex justify-center align-items-center'>
-          {' '}
-          <Button
-            variant='outline'
-            size='sm'
-            className=' px-3 py-1 h-8 text-xs cursor-pointer hover:bg-[#008080]/10 hover:text-[#008080] hover:border-[#008080] transition-colors'
-            onClick={onImportToken}
-          >
-            <Plus className='w-4 h-4 mr-1 text-[#008080]' />
-            Import
-          </Button>
-        </div>
+        {network.value !== 'sol' && (
+         <div className='mt-4 flex justify-center align-items-center'>
+         <Button
+          variant='outline'
+          size='sm'
+          className='px-3 py-1 h-8 text-xs cursor-pointer hover:bg-[#008080]/10 hover:text-[#008080] hover:border-[#008080] transition-colors'
+          onClick={onImportToken}>
+          <Plus className='w-4 h-4 mr-1 text-[#008080]' />
+         Import
+       </Button>
+      </div>
+      )}
       </CardContent>
     </Card>
   );
