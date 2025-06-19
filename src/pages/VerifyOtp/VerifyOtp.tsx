@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import * as Yup from 'yup';
 import { useNavigate, Navigate} from 'react-router-dom';
 import { verifyCode, requestCode } from '../../api/auth';
@@ -26,13 +26,18 @@ const VerifyOtp: React.FC = () => {
   const email = new URLSearchParams(window.location.search).get('email');
   const [error, setError] = useState<string>('');
   const [isResending, setIsResending] = useState<boolean>(false);
+  const otpSentRef = useRef(false);
 
-  // Send OTP on page load 
   useEffect(() => {
-    if (email) {
-      requestCode({ email }).catch(() => {
-        setError('Failed to send OTP. Please try again.');
-      });
+    if (email && !otpSentRef.current) {
+      otpSentRef.current = true;
+      requestCode({ email })
+        .then(() => {
+          toast.success('OTP sent to your email!');
+        })
+        .catch(() => {
+          setError('Failed to send OTP. Please try again.');
+        });
     }
   }, [email]);
 
@@ -80,17 +85,17 @@ const VerifyOtp: React.FC = () => {
               <Formik
                 initialValues={{ otp: '' }}
                 validationSchema={otpValidationSchema}
-                onSubmit={async (values, { setSubmitting }) => {
-                  setError('');
-                  try {
-                    await verifyCode({ code: values.otp, email})
-                    navigate('/sign-up'); 
-                  } catch (err: unknown) {
-                    console.error(err);
-                    setError('Failed to verify code. Please try again.');
-                  }
-                  setSubmitting(false);
-                }}
+               onSubmit={async (values, { setSubmitting }) => {
+                setError('');
+                try {
+                await verifyCode({ code: values.otp, email });
+                navigate('/sign-up'); 
+               } catch (err: unknown) {
+               console.error(err);
+               setError('Failed to verify code. Please try again.');
+               }
+               setSubmitting(false);
+               }}
               >
                 {({
                   values,
