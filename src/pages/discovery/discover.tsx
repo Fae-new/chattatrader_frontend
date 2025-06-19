@@ -80,15 +80,12 @@ const Discover: React.FC = () => {
   };
 
   const handleChainClick = (chain: Chain) => {
-    console.log(showDetails);
     if (selectedChain === chain) {
       return;
     } else {
       setLoading(true);
-      setTimeout(() => {
-        setSelectedChain(chain);
-        setLoading(false);
-      }, 800); // simulate API loading
+      setSelectedChain(chain);
+      setLoading(false);
     }
   };
 
@@ -191,7 +188,8 @@ const Discover: React.FC = () => {
         {/* Subheading showing selected tab */}
         <p className='text-sm text-[#475569] font-medium'>
           Trending on {getChainLabel(selectedChain)}
-        </p>{' '}
+        </p>
+
         <Tabs
           value={selectedChain}
           onValueChange={(val) => handleChainClick(val as Chain)}
