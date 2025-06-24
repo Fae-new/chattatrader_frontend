@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
-import {
-  defaultTrades,
-  type Trade,
-  type TradeStatus,
-  type TradeType,
-} from './types';
+import { type TradeStatus, type TradeType, type Transaction } from './types';
 import { Link } from 'react-router-dom';
 import BarChartIcon from './BarChartIcon';
+import { getTransactionHistory } from '../../api/transactions';
+import { useAuth } from '../../context/AuthContext';
 
 const statusStyles: Record<TradeStatus, string> = {
   Successful: 'bg-teal-100 text-teal-600',
@@ -32,7 +29,8 @@ const tableHeaders = [
 ];
 
 export default function History() {
-  const [trades] = useState<Trade[]>(defaultTrades);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const { token, user } = useAuth();
 
   const tableheadStyles =
     'py-2 px-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider';
@@ -40,8 +38,12 @@ export default function History() {
   useEffect(() => {
     const fetchTrades = async () => {
       try {
-        // const response = await fetch('/api/trades');
-        // const data = await response.json();
+        const transactions = await getTransactionHistory(
+          token ?? '',
+          user?.id ?? ''
+        );
+        setTransactions(transactions);
+        console.log('Response:', transactions);
       } catch (error) {
         console.error('Error fetching trades:', error);
       }
@@ -56,7 +58,7 @@ export default function History() {
       <div className='mb-6 sm:mt-6'>
         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6'>
           {/* Mobile: Centered title aligned with hamburger */}
-          <div className='flex items-center justify-center sm:justify-start relative sm:static pt-2 sm:pt-0'>
+          <div className='flex items-center justify-center sm:justify-start relative sm:static sm:pt-0 pt-2'>
             <h1 className='text-2xl font-semibold text-gray-800'>
               Trade History
             </h1>
@@ -87,7 +89,7 @@ export default function History() {
       </div>
 
       {/* Table */}
-      {trades.length === 0 ? (
+      {transactions.length === 0 ? (
         // Empty State
         <div className='rounded-xl border border-gray-200 bg-white relative overflow-hidden'>
           <div className='flex flex-col items-center justify-center py-16 px-6 relative'>
@@ -141,7 +143,7 @@ export default function History() {
                 </tr>
               </thead>
               <tbody className='divide-y divide-gray-100'>
-                {trades.map((trade, index) => (
+                {transactions.map((transaction, index) => (
                   <tr
                     key={index}
                     className='hover:bg-gray-50 transition-colors'
@@ -150,51 +152,51 @@ export default function History() {
                       <div className='flex items-center gap-2 justify-center'>
                         <span
                           className={`font-medium text-center ${
-                            trade.type === 'Buy'
+                            transaction.type === 'Buy'
                               ? 'text-green-500'
-                              : trade.type === 'Sell'
+                              : transaction.type === 'Sell'
                                 ? 'text-red-500'
                                 : 'text-blue-500'
                           }`}
                         >
-                          {typeArrow[trade.type]}
+                          {typeArrow[transaction.type]}
                         </span>
-                        <span className='text-sm'>{trade.type}</span>
+                        <span className='text-sm'>{transaction.type}</span>
                       </div>
                     </td>
                     <td className='py-2 px-3 whitespace-nowrap font-medium text-center text-sm'>
-                      {trade.amount}
+                      {transaction.tokenOut.amount}
                     </td>
                     <td className='py-2 px-3 whitespace-nowrap text-center text-sm text-gray-600'>
-                      {trade.chain}
+                      {transaction.chain}
                     </td>
                     <td className='py-2 px-3 whitespace-nowrap text-center'>
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                          statusStyles[trade.status]
+                          statusStyles[transaction.status]
                         }`}
                       >
-                        {trade.status}
+                        {transaction.status}
                       </span>
                     </td>
                     <td className='py-2 px-3 whitespace-nowrap text-center text-sm text-gray-600'>
-                      {trade.tokenIn}
+                      {transaction.tokenIn.symbol}
                     </td>
                     <td className='py-2 px-3 whitespace-nowrap text-center text-sm text-gray-600'>
-                      {trade.tokenOut}
+                      {transaction.tokenOut.symbol}
                     </td>
                     <td className='py-2 px-3 text-center'>
                       <a
-                        href={`https://etherscan.io/tx/${trade.hash}`}
+                        href={`https://etherscan.io/tx/${transaction.hash}`}
                         target='_blank'
                         rel='noopener noreferrer'
                         className='text-blue-500 hover:text-blue-600 hover:underline truncate max-w-[120px] inline-block text-sm'
                       >
-                        {trade.hash}
+                        {transaction.hash}
                       </a>
                     </td>
                     <td className='py-2 px-3 whitespace-nowrap text-gray-500 text-sm'>
-                      {new Date(trade.date).toLocaleString()}
+                      {new Date(transaction.date).toLocaleString()}
                     </td>
                   </tr>
                 ))}
@@ -205,9 +207,8 @@ export default function History() {
           {/* Pagination */}
           <div className='px-4 py-3 border-t border-gray-200 flex items-center justify-between bg-white'>
             <div className='text-sm text-gray-500'>
-              Showing <span className='font-medium'>1</span> to{' '}
-              <span className='font-medium'>3</span> of{' '}
-              <span className='font-medium'>3</span> results
+              Showing <span className='font-medium'>Page 1</span> of{' '}
+              <span className='font-medium'>3</span>
             </div>
             <div className='flex gap-2'>
               <button className='px-3 py-1 border border-gray-200 rounded text-sm hover:bg-gray-50 bg-white'>
