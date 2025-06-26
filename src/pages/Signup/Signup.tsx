@@ -9,7 +9,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Input from '../../reuseables/input';
 import { Button } from '../../reuseables/button';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import type { FieldProps, FieldInputProps } from 'formik';
 
 const signupValidationSchema = Yup.object({
@@ -45,8 +46,8 @@ export default function Signup() {
       'message' in err.response.data
     ) {
       toast.error(
-        (err.response.data as { message?: string }).message || fallback
-      );
+         (err.response.data as { message?: string }).message || fallback
+      )
     } else {
       toast.error(fallback);
     }

@@ -12,7 +12,7 @@ import {
 } from '../../reuseables/input-otp';
 import { Label } from '../../reuseables/label';
 import { Button } from '../../reuseables/button';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 const otpValidationSchema = Yup.object({
   otp: Yup.string()
@@ -46,7 +46,6 @@ const VerifyOtp: React.FC = () => {
   }
 
   
-
   const handleResendOTP = async () => {
     setError('');
     setIsResending(true);
