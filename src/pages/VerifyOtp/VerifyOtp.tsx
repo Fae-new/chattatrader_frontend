@@ -12,12 +12,12 @@ import {
 } from '../../reuseables/input-otp';
 import { Label } from '../../reuseables/label';
 import { Button } from '../../reuseables/button';
-import toast from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 
 const otpValidationSchema = Yup.object({
   otp: Yup.string()
     .required('OTP is required')
-    .matches(/^[a-zA-Z0-9]+$/, 'Must contain only letters and numbers')
+     .matches(/^\d{6}$/, 'Must be exactly 6 digits')
     .length(6, 'Must be exactly 6 characters'),
 });
 
@@ -27,6 +27,8 @@ const VerifyOtp: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [isResending, setIsResending] = useState<boolean>(false);
   const otpSentRef = useRef(false);
+  const [resendTimer, setResendTimer] = useState(0);
+  
 
   useEffect(() => {
     if (email && !otpSentRef.current) {
@@ -39,20 +41,28 @@ const VerifyOtp: React.FC = () => {
           setError('Failed to send OTP. Please try again.');
         });
     }
-  }, [email]);
+
+   let timerInterval: NodeJS.Timeout;
+  if (resendTimer > 0) {
+    timerInterval = setInterval(() => {
+      setResendTimer((prev) => prev - 1);
+    }, 1000);
+  }
+  return () => clearInterval(timerInterval);
+  }, [email, resendTimer]);
 
   if (!email) {
     return <Navigate to="/signup" replace />;
   }
 
   
-
   const handleResendOTP = async () => {
     setError('');
     setIsResending(true);
     try {
       await requestCode({ email });
       toast.success("OTP resent successfully!");
+      setResendTimer(60); // Start a 60-second timer
     } catch (err: unknown) {
       setError('Failed to resend OTP. Please try again.');
     } finally {
@@ -62,6 +72,7 @@ const VerifyOtp: React.FC = () => {
 
   return (
     <div className='flex h-screen w-full'>
+     <Toaster position='top-center' />
       <div className='w-full md:w-1/2 bg-gray-100 flex flex-col justify-center px-4 sm:px-6 lg:px-20 xl:px-24'>
         <div className='w-full max-w-sm mx-auto'>
           <div className='text-center mb-6'>
@@ -90,9 +101,12 @@ const VerifyOtp: React.FC = () => {
                 try {
                 await verifyCode({ code: values.otp, email });
                 navigate('/sign-up'); 
+                toast.success('Email verified successfully!')
                } catch (err: unknown) {
                console.error(err);
-               setError('Failed to verify code. Please try again.');
+                const errorMessage = (err as any)?.response?.data?.message || 'Failed to verify code. Please try again.';
+                setError(errorMessage);
+                toast.error(errorMessage);
                }
                setSubmitting(false);
                }}
@@ -112,6 +126,7 @@ const VerifyOtp: React.FC = () => {
                       <div className='flex justify-center items-center'>
                         <InputOTP
                           type="text"
+                          inputMode="numeric"
                           maxLength={6}
                           value={values.otp}
                           onChange={(value) => setFieldValue('otp', value)}
@@ -152,9 +167,9 @@ const VerifyOtp: React.FC = () => {
                         type='button'
                         className='text-[#008080] hover:underline'
                         onClick={handleResendOTP}
-                        disabled={isResending}
+                        disabled={isResending || resendTimer > 0} 
                       >
-                        {isResending ? 'Resending...' : 'Resend'}
+                        {isResending ? 'Resending...' : resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend'}
                       </button>
                     </p>
                   </Form>
