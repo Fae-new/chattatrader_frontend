@@ -12,12 +12,12 @@ import {
 } from '../../reuseables/input-otp';
 import { Label } from '../../reuseables/label';
 import { Button } from '../../reuseables/button';
-import { toast } from 'react-toastify';
+import { Toaster, toast } from 'react-hot-toast';
 
 const otpValidationSchema = Yup.object({
   otp: Yup.string()
     .required('OTP is required')
-    .matches(/^[a-zA-Z0-9]+$/, 'Must contain only letters and numbers')
+     .matches(/^\d{6}$/, 'Must be exactly 6 digits')
     .length(6, 'Must be exactly 6 characters'),
 });
 
@@ -61,6 +61,7 @@ const VerifyOtp: React.FC = () => {
 
   return (
     <div className='flex h-screen w-full'>
+     <Toaster position='top-center' />
       <div className='w-full md:w-1/2 bg-gray-100 flex flex-col justify-center px-4 sm:px-6 lg:px-20 xl:px-24'>
         <div className='w-full max-w-sm mx-auto'>
           <div className='text-center mb-6'>
@@ -89,9 +90,12 @@ const VerifyOtp: React.FC = () => {
                 try {
                 await verifyCode({ code: values.otp, email });
                 navigate('/sign-up'); 
+                toast.success('Email verified successfully!')
                } catch (err: unknown) {
                console.error(err);
-               setError('Failed to verify code. Please try again.');
+                const errorMessage = (err as any)?.response?.data?.message || 'Failed to verify code. Please try again.';
+                setError(errorMessage);
+                toast.error(errorMessage);
                }
                setSubmitting(false);
                }}
@@ -110,7 +114,7 @@ const VerifyOtp: React.FC = () => {
                       </div>
                       <div className='flex justify-center items-center'>
                         <InputOTP
-                          type="text"
+                          type="numeric"
                           maxLength={6}
                           value={values.otp}
                           onChange={(value) => setFieldValue('otp', value)}
