@@ -27,6 +27,8 @@ const VerifyOtp: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [isResending, setIsResending] = useState<boolean>(false);
   const otpSentRef = useRef(false);
+  const [resendTimer, setResendTimer] = useState(0);
+  
 
   useEffect(() => {
     if (email && !otpSentRef.current) {
@@ -39,7 +41,15 @@ const VerifyOtp: React.FC = () => {
           setError('Failed to send OTP. Please try again.');
         });
     }
-  }, [email]);
+
+   let timerInterval: NodeJS.Timeout;
+  if (resendTimer > 0) {
+    timerInterval = setInterval(() => {
+      setResendTimer((prev) => prev - 1);
+    }, 1000);
+  }
+  return () => clearInterval(timerInterval);
+  }, [email, resendTimer]);
 
   if (!email) {
     return <Navigate to="/signup" replace />;
@@ -52,6 +62,7 @@ const VerifyOtp: React.FC = () => {
     try {
       await requestCode({ email });
       toast.success("OTP resent successfully!");
+      setResendTimer(60); // Start a 60-second timer
     } catch (err: unknown) {
       setError('Failed to resend OTP. Please try again.');
     } finally {
@@ -155,9 +166,9 @@ const VerifyOtp: React.FC = () => {
                         type='button'
                         className='text-[#008080] hover:underline'
                         onClick={handleResendOTP}
-                        disabled={isResending}
+                        disabled={isResending || resendTimer > 0} 
                       >
-                        {isResending ? 'Resending...' : 'Resend'}
+                        {isResending ? 'Resending...' : resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend'}
                       </button>
                     </p>
                   </Form>
