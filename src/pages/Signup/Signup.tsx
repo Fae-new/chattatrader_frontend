@@ -9,8 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Input from '../../reuseables/input';
 import { Button } from '../../reuseables/button';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toaster, toast } from 'react-hot-toast';
 import type { FieldProps, FieldInputProps } from 'formik';
 
 const signupValidationSchema = Yup.object({
@@ -34,23 +33,18 @@ export default function Signup() {
   const navigate = useNavigate();
 
   const handleApiError = (err: unknown, fallback: string) => {
-    if (
-      err &&
-      typeof err === 'object' &&
-      'response' in err &&
-      err.response &&
-      typeof err.response === 'object' &&
-      'data' in err.response &&
-      err.response.data &&
-      typeof err.response.data === 'object' &&
-      'message' in err.response.data
-    ) {
-      toast.error(
-         (err.response.data as { message?: string }).message || fallback
-      )
-    } else {
-      toast.error(fallback);
+    // Try to extract a message from common error shapes (Axios, fetch, etc)
+    let message = fallback;
+    if (err && typeof err === 'object') {
+      // Axios style: err.response.data.message
+      message = (err as any)?.response?.data?.message ||
+        // Fetch style: err.message
+        (err as any)?.message ||
+        fallback;
+    } else if (typeof err === 'string') {
+      message = err;
     }
+    toast.error(message);
   };
   const handleLoginSubmit = async (vals: {
     email: string;
@@ -318,6 +312,7 @@ export default function Signup() {
 
   return (
     <div className='flex flex-col md:flex-row w-full min-h-screen'>
+      <Toaster position='top-center' />
       <div className='w-full md:w-1/2 flex flex-col'>
         <div className='max-w-md mx-auto'>
           <h1 className='text-[25px] text-center font-bold text-[#008080] font-poppins pt-6'>
@@ -343,7 +338,6 @@ export default function Signup() {
           </div>
         </div>
       </div>
-
       <div
         className='hidden md:flex md:w-1/2 bg-cover bg-center'
         style={{ backgroundImage: "url('/images/chatbot.png')" }}
