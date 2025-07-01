@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as Yup from 'yup';
-import { useNavigate, Navigate} from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { verifyCode, requestCode } from '../../api/auth';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { Card, CardContent } from '../../reuseables/Card';
@@ -42,17 +42,15 @@ const VerifyOtp: React.FC = () => {
   }, [email]);
 
   if (!email) {
-    return <Navigate to="/signup" replace />;
+    return <Navigate to='/sign-up' replace />;
   }
-
-  
 
   const handleResendOTP = async () => {
     setError('');
     setIsResending(true);
     try {
       await requestCode({ email });
-      toast.success("OTP resent successfully!");
+      toast.success('OTP resent successfully!');
     } catch (err: unknown) {
       setError('Failed to resend OTP. Please try again.');
     } finally {
@@ -85,17 +83,17 @@ const VerifyOtp: React.FC = () => {
               <Formik
                 initialValues={{ otp: '' }}
                 validationSchema={otpValidationSchema}
-               onSubmit={async (values, { setSubmitting }) => {
-                setError('');
-                try {
-                await verifyCode({ code: values.otp, email });
-                navigate('/sign-up'); 
-               } catch (err: unknown) {
-               console.error(err);
-               setError('Failed to verify code. Please try again.');
-               }
-               setSubmitting(false);
-               }}
+                onSubmit={async (values, { setSubmitting }) => {
+                  setError('');
+                  try {
+                    await verifyCode({ code: values.otp, email });
+                    navigate('/sign-up');
+                  } catch (err: unknown) {
+                    console.error(err);
+                    setError('Failed to verify code. Please try again.');
+                  }
+                  setSubmitting(false);
+                }}
               >
                 {({
                   values,
@@ -111,7 +109,7 @@ const VerifyOtp: React.FC = () => {
                       </div>
                       <div className='flex justify-center items-center'>
                         <InputOTP
-                          type="text"
+                          type='text'
                           maxLength={6}
                           value={values.otp}
                           onChange={(value) => setFieldValue('otp', value)}

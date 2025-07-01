@@ -151,6 +151,16 @@ export default function ChatPage() {
     }
   };
 
+  // Add this handler to update chat title in state
+  const handleChatTitleUpdated = (updatedChat: Chat) => {
+    setChats((prev) =>
+      prev.map((c) => (c.chatId === updatedChat.chatId ? updatedChat : c))
+    );
+    if (currentChat && currentChat.chatId === updatedChat.chatId) {
+      setCurrentChat(updatedChat);
+    }
+  };
+
   // Show full page loader while initial chats are loading
   if (loading) {
     return (
@@ -218,6 +228,8 @@ export default function ChatPage() {
           onClose={() => setIsChatsOpen(false)}
           onSelectChat={handleSelectChat}
           onCreateNewChat={createNewChat}
+          token={token || ''}
+          onChatTitleUpdated={handleChatTitleUpdated}
         />
       </div>
     </>

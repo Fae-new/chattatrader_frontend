@@ -1,5 +1,14 @@
+import type { TokenData } from '../pages/discovery/types';
 import type { Transaction } from '../pages/History/types';
 import instance from './client';
+
+type TokenDetailsResponse = {
+  success: Boolean;
+  data: {
+    chain: string;
+    token: TokenData;
+  };
+};
 
 export const getTransactionHistory = async (
   token: string,
@@ -13,7 +22,9 @@ export const getTransactionHistory = async (
   return res.data.data;
 };
 
-export const getTokenDetails = async (contractAddress: string) => {
+export const getTokenDetails = async (
+  contractAddress: string
+): Promise<TokenDetailsResponse> => {
   const res = await instance.get(`/tokens/${contractAddress}`);
   return res.data;
 };
