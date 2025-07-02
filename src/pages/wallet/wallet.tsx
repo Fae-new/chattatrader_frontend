@@ -222,7 +222,10 @@ const Wallet: React.FC = () => {
     setIsImportModalOpen(false);
   };
   return (
-    <div className='bg-gradient-to-b from-gray-50 to-white min-h-screen p-2 pt-0 md:p-6'>
+    <div
+      className='bg-gradient-to-b from-gray-50 to-white p-2 pt-0 md:p-6'
+      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
+    >
       {/* Header */}{' '}
       <header className='flex justify-end md:justify-between items-center sm:p-4 mb-4 md:mb-6 relative z-10'>
         <div className='flex flex-row-reverse md:flex-row items-center gap-3'>
@@ -686,31 +689,30 @@ const Wallet: React.FC = () => {
         copiedText={copiedText}
       />
       {tokenToDelete && (
-  <Modal onClose={() => setTokenToDelete(null)}>
-    <div className="p-6 text-center">
-      <h2 className="text-lg font-semibold mb-2">Delete Token?</h2>
-      <p className="mb-4 text-gray-600">
-        Are you sure you want to delete <span className="font-bold">{tokenToDelete.name}</span>?
-      </p>
-      <div className="flex justify-center gap-4">
-        <button
-          className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700"
-        >
-          Cancel
-        </button>
-        <button
-          className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white"
-          onClick={() => {
-            handleDeleteToken(tokenToDelete.id);
-            setTokenToDelete(null);
-          }}
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  </Modal>
-)}
+        <Modal onClose={() => setTokenToDelete(null)}>
+          <div className='p-6 text-center'>
+            <h2 className='text-lg font-semibold mb-2'>Delete Token?</h2>
+            <p className='mb-4 text-gray-600'>
+              Are you sure you want to delete{' '}
+              <span className='font-bold'>{tokenToDelete.name}</span>?
+            </p>
+            <div className='flex justify-center gap-4'>
+              <button className='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700'>
+                Cancel
+              </button>
+              <button
+                className='px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white'
+                onClick={() => {
+                  handleDeleteToken(tokenToDelete.id);
+                  setTokenToDelete(null);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

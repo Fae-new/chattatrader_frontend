@@ -8,12 +8,16 @@ interface MessagesContainerProps {
   messages: Message[];
   audioBlob: Blob | null;
   onSendAudio: () => void;
+  chatId?: string;
+  token?: string;
 }
 
 export const MessagesContainer: React.FC<MessagesContainerProps> = ({
   messages,
   audioBlob,
   onSendAudio,
+  chatId,
+  token,
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -29,14 +33,23 @@ export const MessagesContainer: React.FC<MessagesContainerProps> = ({
   useEffect(() => {
     scrollToBottom();
   }, [messages, audioBlob]);
-
   return (
-    <div className='flex-1 overflow-y-auto pr-1 sm:pr-2 flex flex-col custom-scrollbar pt-8'>
-      {messages.map((msg, index) => (
-        <MessageRenderer key={index} message={msg} index={index} />
-      ))}
-      {audioBlob && <AudioPreview audioBlob={audioBlob} onSend={onSendAudio} />}
-      <div ref={messagesEndRef} />
+    <div className='flex-1 overflow-y-auto px-2 sm:px-3 flex flex-col custom-scrollbar py-3'>
+      <div className='flex-grow'>
+        {messages.map((msg, index) => (
+          <MessageRenderer
+            key={index}
+            message={msg}
+            index={index}
+            chatId={chatId}
+            token={token}
+          />
+        ))}
+        {audioBlob && (
+          <AudioPreview audioBlob={audioBlob} onSend={onSendAudio} />
+        )}
+      </div>
+      <div ref={messagesEndRef} className='h-1' />
     </div>
   );
 };

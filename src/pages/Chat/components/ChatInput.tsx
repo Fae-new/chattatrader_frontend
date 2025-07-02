@@ -35,7 +35,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const triggerImageUpload = () => {
     fileInputRef.current?.click();
   };
-
   return (
     <>
       <input
@@ -46,7 +45,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         onChange={handleImageUpload}
       />
 
-      <div className='mt-4 flex gap-2 w-full'>
+      <div className='flex gap-2 w-full sticky bottom-0 bg-white/60 backdrop-blur-md py-3 px-1'>
         <div className='flex-1 min-w-0'>
           <input
             type='text'
@@ -58,6 +57,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             }
             onKeyDown={(e) => e.key === 'Enter' && onSendText()}
             disabled={isRecording}
+            // Prevent auto-scroll on focus for iOS
+            onFocus={(e) => {
+              // Prevent auto-scroll behavior on iOS
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
           />
         </div>
 

@@ -30,7 +30,6 @@ export const router = createBrowserRouter([
       { path: 'verify-otp', element: <VerifyOtp /> },
     ],
   },
-
   {
     path: '/app',
     element: (
@@ -44,6 +43,14 @@ export const router = createBrowserRouter([
       </ErrorWithSidebar>
     ),
     children: [
+      {
+        index: true,
+        element: (
+          <ProtectedRoute>
+            <Discover />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: 'about',
         element: (
@@ -108,6 +115,18 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path: '*',
+        element: (
+          <ProtectedRoute>
+            <NotFound />
+          </ProtectedRoute>
+        ),
+      },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);

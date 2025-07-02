@@ -21,7 +21,10 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <div className='min-h-screen bg-white'>
+    <div
+      className='bg-white'
+      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
+    >
       <LandingNav />
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <main className='space-y-8'>

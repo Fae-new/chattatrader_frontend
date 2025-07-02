@@ -5,18 +5,67 @@ import TradeConfirmation from '../../../components/TradeComfirmation';
 import TokenTable from '../../../components/TokenTable';
 import TokenInfoMessage from '../../../components/TokenInfo';
 import { MessageType, type Message } from '../types';
-import { delay } from '../utils';
+import { buyChatToken, sellChatToken } from '../../../api/chat';
 
 interface MessageRendererProps {
   message: Message;
   index: number;
+  chatId?: string;
+  token?: string;
 }
 
 export const MessageRenderer: React.FC<MessageRendererProps> = ({
   message,
   index,
+  chatId,
+  token,
 }) => {
   const isUser = message.role === 'user';
+
+  const handleTradeConfirm = async () => {
+    if (!chatId || !token || !message.tradeData) {
+      throw new Error('Missing required data for trade execution');
+    }
+
+    try {
+      if (message.tradeData.type === 'buy') {
+        const response = await buyChatToken(
+          {
+            chatId,
+            amountInUsd: message.tradeData.amount.toString(),
+            tokenAddress: message.tradeData.address,
+          },
+          token
+        );
+
+        return {
+          hash: response.data.transactionHash || '',
+          message: response.message,
+          success: response.success,
+        };
+      } else if (message.tradeData.type === 'sell') {
+        const response = await sellChatToken(
+          {
+            chatId,
+            percentage: message.tradeData.amount.toString(),
+            tokenAddress: message.tradeData.address,
+          },
+          token
+        );
+
+        return {
+          hash: response.data.transactionHash || '',
+          message: response.message,
+          success: response.success,
+        };
+      } else {
+        throw new Error('Invalid trade type');
+      }
+    } catch (error) {
+      console.error('Trade execution failed:', error);
+      throw error;
+    }
+  };
 
   if (message.type === MessageType.TRADE_EXECUTION) {
     return (
@@ -31,14 +80,7 @@ export const MessageRenderer: React.FC<MessageRendererProps> = ({
           hash={message.tradeData?.hash || undefined}
           isCompleted={message.tradeData?.isCompleted || false}
           onCancel={() => {}}
-          onConfirm={async () => {
-            await delay(5000);
-            return {
-              hash: 'samplehash',
-              message: 'Trade Succesful',
-              success: true,
-            };
-          }}
+          onConfirm={handleTradeConfirm}
         />
       </div>
     );

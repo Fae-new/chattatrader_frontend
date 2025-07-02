@@ -7,6 +7,9 @@ import './index.css';
 import { Suspense } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import Loader from './reuseables/Loader';
+import { setViewportHeightVar } from './lib/viewportHeight';
+
+setViewportHeightVar();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

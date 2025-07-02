@@ -27,7 +27,10 @@ const ComingSoon = () => {
   };
 
   return (
-    <div className='min-h-screen flex flex-col lg:flex-row'>
+    <div
+      className='flex flex-col lg:flex-row'
+      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
+    >
       <Toaster position='top-center' />
 
       {/* Left Section */}

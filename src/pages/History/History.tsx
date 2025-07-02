@@ -53,7 +53,10 @@ export default function History() {
   }, []);
 
   return (
-    <div className='px-6 bg-gray-50 min-h-screen backdrop-blur-md'>
+    <div
+      className='px-6 bg-gray-50 min-h-screen backdrop-blur-md'
+      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
+    >
       {/* Header */}
       <div className='mb-6 sm:mt-6'>
         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6'>
@@ -69,7 +72,7 @@ export default function History() {
               Download CSV
             </button>
             <button className='bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors'>
-              <Link to={'/trade'}>+ New Trade</Link>
+              <Link to='/app/manual-trading'>+ New Trade</Link>
             </button>
           </div>
         </div>
@@ -118,7 +121,7 @@ export default function History() {
                     d='M12 4v16m8-8H4'
                   />
                 </svg>
-                <Link to='/trade'> Start Trading</Link>
+                <Link to='/app/manual-trading'> Start Trading</Link>
               </button>
             </div>
           </div>
