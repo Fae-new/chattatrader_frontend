@@ -26,7 +26,6 @@ const Discover: React.FC = () => {
   const [showTradeModal, setShowTradeModal] = useState<TrendingToken | null>(
     null
   );
-  const [loading, setLoading] = useState(false);
   const [trendingTokens, setTrendingTokens] = useState<{
     solana: { tokens: TrendingToken[] };
     ethereum: { tokens: TrendingToken[] };
