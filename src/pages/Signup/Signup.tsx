@@ -37,7 +37,8 @@ export default function Signup() {
     let message = fallback;
     if (err && typeof err === 'object') {
       // Axios style: err.response.data.message
-      message = (err as any)?.response?.data?.message ||
+      message =
+        (err as any)?.response?.data?.message ||
         // Fetch style: err.message
         (err as any)?.message ||
         fallback;
@@ -311,7 +312,10 @@ export default function Signup() {
   };
 
   return (
-    <div className='flex flex-col md:flex-row w-full min-h-screen'>
+    <div
+      className='flex flex-col md:flex-row w-full'
+      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
+    >
       <Toaster position='top-center' />
       <div className='w-full md:w-1/2 flex flex-col'>
         <div className='max-w-md mx-auto'>

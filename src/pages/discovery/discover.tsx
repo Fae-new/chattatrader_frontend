@@ -68,7 +68,7 @@ const Discover: React.FC = () => {
             price: '$2,345.67',
           },
           {
-            id: '3', 
+            id: '3',
             name: 'Base',
             symbol: 'BASE',
             chain: 'base',
@@ -133,16 +133,19 @@ const Discover: React.FC = () => {
           ethereum: { tokens: [] },
           base: { tokens: [] },
         });
-        console.error("Failed to fetch trending tokens:", error);
+        console.error('Failed to fetch trending tokens:', error);
       } finally {
         setTrendingLoading(false);
       }
     };
     fetchTrending();
-  }, []); 
+  }, []);
 
   return (
-    <div className='pt-2 px-4 md:px-6 lg:px-10 space-y-6 bg-[#FFFFFF] min-h-screen'>
+    <div
+      className='pt-2 px-4 md:px-6 lg:px-10 space-y-6 bg-[#FFFFFF]'
+      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
+    >
       <div className='w-full max-w-7xl mx-auto'>
         <h1 className='text-xl md:text-2xl font-bold text-center text-[#0f172a]'>
           Discover
@@ -197,7 +200,7 @@ const Discover: React.FC = () => {
                 className={`px-4 py-2 text-sm font-medium transition-all duration-200 ease-out rounded-md relative
                 ${
                   selectedChain === chain
-                    ? 'bg-[#007b83] text-white shadow-sm ring-2 ring-[#007b83]/20' 
+                    ? 'bg-[#007b83] text-white shadow-sm ring-2 ring-[#007b83]/20'
                     : 'bg-white text-gray-600 hover:text-[#007b83] hover:bg-[#007b83]/5'
                 }`}
               >

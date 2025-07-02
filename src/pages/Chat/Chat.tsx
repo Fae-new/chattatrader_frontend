@@ -164,7 +164,10 @@ export default function ChatPage() {
   // Show full page loader while initial chats are loading
   if (loading) {
     return (
-      <div className='flex h-screen items-center justify-center'>
+      <div
+        className='flex items-center justify-center'
+        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
+      >
         <Loader />
       </div>
     );
@@ -179,7 +182,10 @@ export default function ChatPage() {
         <FaComments size={20} />
       </button>
 
-      <div className='flex h-screen overflow-hidden'>
+      <div
+        className='flex overflow-hidden'
+        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
+      >
         {/* Chat Area - Left */}
         <div className='flex-1 flex flex-col bg-white/20 backdrop-blur-md p-2 sm:p-2 md:p-2'>
           {chats.length === 0 ? (

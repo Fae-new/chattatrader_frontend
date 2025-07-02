@@ -69,7 +69,10 @@ const VerifyOtp: React.FC = () => {
   };
 
   return (
-    <div className='flex h-screen w-full'>
+    <div
+      className='flex w-full'
+      style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
+    >
       <Toaster position='top-center' />
       <div className='w-full md:w-1/2 bg-gray-100 flex flex-col justify-center px-4 sm:px-6 lg:px-20 xl:px-24'>
         <div className='w-full max-w-sm mx-auto'>

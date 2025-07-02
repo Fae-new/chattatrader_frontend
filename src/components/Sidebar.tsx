@@ -50,9 +50,10 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className={`w-64 h-screen fixed md:relative z-40 p-4 flex flex-col justify-between
+        className={`w-64 fixed md:relative z-40 p-4 flex flex-col justify-between
     bg-white/10 backdrop-blur-lg rounded-r-xl shadow-lg transition-all duration-300 ease-in-out
     ${isOpen ? 'left-0' : '-left-64 md:left-0'}`}
+        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
       >
         <div>
           <div className='flex items-center justify-between mb-6'>
@@ -75,7 +76,8 @@ export default function Sidebar() {
                     currentPath.toLowerCase() === '/app/discover'
                   : currentPath.toLowerCase() === path;
 
-              return (                <Link
+              return (
+                <Link
                   key={label}
                   onClick={toggleSidebar}
                   to={path}
@@ -94,7 +96,12 @@ export default function Sidebar() {
         </div>
 
         <div className='mt-6'>
-          <hr className='my-4 border-gray-200' />{' '}          <Link to='/app/settings' className='cursor-pointer' onClick={toggleSidebar}>
+          <hr className='my-4 border-gray-200' />{' '}
+          <Link
+            to='/app/settings'
+            className='cursor-pointer'
+            onClick={toggleSidebar}
+          >
             <button
               className={`flex items-center gap-2 text-sm cursor-pointer ${
                 currentPath === '/app/settings'
