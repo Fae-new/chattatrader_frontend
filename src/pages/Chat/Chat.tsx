@@ -192,8 +192,7 @@ export default function ChatPage() {
                   {currentChat?.title || 'Select a chat'}
                 </h2>
               </div>
-
-              {/* Messages Container with individual chat loading */}
+              {/* Messages Container with individual chat loading */}{' '}
               {chatLoading ? (
                 <div className='flex-1 flex items-center justify-center'>
                   <Loader />
@@ -203,9 +202,10 @@ export default function ChatPage() {
                   messages={messages}
                   audioBlob={audioBlob}
                   onSendAudio={handleSendAudio}
+                  chatId={currentChat?.chatId}
+                  token={token || undefined}
                 />
               )}
-
               <ChatInput
                 input={input}
                 setInput={setInput}
