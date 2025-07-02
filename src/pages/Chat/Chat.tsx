@@ -183,7 +183,7 @@ export default function ChatPage() {
       </button>
 
       <div
-        className='flex overflow-hidden'
+        className='flex flex-col overflow-hidden'
         style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
       >
         {/* Chat Area - Left */}
@@ -198,7 +198,7 @@ export default function ChatPage() {
                   {currentChat?.title || 'Select a chat'}
                 </h2>
               </div>
-              {/* Messages Container with individual chat loading */}{' '}
+              {/* Messages Container with individual chat loading */}
               {chatLoading ? (
                 <div className='flex-1 flex items-center justify-center'>
                   <Loader />
