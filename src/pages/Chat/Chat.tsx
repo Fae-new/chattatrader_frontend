@@ -150,7 +150,6 @@ export default function ChatPage() {
       sendMessage(audioBlob, MessageType.AUDIO);
     }
   };
-
   // Add this handler to update chat title in state
   const handleChatTitleUpdated = (updatedChat: Chat) => {
     setChats((prev) =>
@@ -161,18 +160,7 @@ export default function ChatPage() {
     }
   };
 
-  // Show full page loader while initial chats are loading
-  if (loading) {
-    return (
-      <div
-        className='flex items-center justify-center'
-        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
-      >
-        <Loader />
-      </div>
-    );
-  }
-  // Add an effect to handle viewport changes
+  // Add an effect to handle viewport changes - placed before conditional rendering to follow React Hook rules
   useEffect(() => {
     const handleVisualViewportChange = () => {
       // This helps adjust when keyboard appears
@@ -207,6 +195,18 @@ export default function ChatPage() {
       }
     };
   }, []);
+
+  // Show full page loader while initial chats are loading
+  if (loading) {
+    return (
+      <div
+        className='flex items-center justify-center'
+        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
+      >
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <>
