@@ -75,10 +75,9 @@ export default function Sidebar() {
                     currentPath.toLowerCase() === '/app/discover'
                   : currentPath.toLowerCase() === path;
 
-              return (
-                <Link
+              return (                <Link
                   key={label}
-                  onClick={() => toggleSidebar}
+                  onClick={toggleSidebar}
                   to={path}
                   className={`flex items-center gap-2 text-sm px-4 py-3 rounded transition-colors duration-200 ${
                     isActive
@@ -95,8 +94,7 @@ export default function Sidebar() {
         </div>
 
         <div className='mt-6'>
-          <hr className='my-4 border-gray-200' />{' '}
-          <Link to='/app/settings' className='cursor-pointer'>
+          <hr className='my-4 border-gray-200' />{' '}          <Link to='/app/settings' className='cursor-pointer' onClick={toggleSidebar}>
             <button
               className={`flex items-center gap-2 text-sm cursor-pointer ${
                 currentPath === '/app/settings'
