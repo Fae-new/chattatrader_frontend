@@ -172,6 +172,41 @@ export default function ChatPage() {
       </div>
     );
   }
+  // Add an effect to handle viewport changes
+  useEffect(() => {
+    const handleVisualViewportChange = () => {
+      // This helps adjust when keyboard appears
+      if (
+        document.activeElement instanceof HTMLInputElement ||
+        document.activeElement instanceof HTMLTextAreaElement
+      ) {
+        // When input is focused (keyboard likely visible)
+        const viewportHeight =
+          window.visualViewport?.height || window.innerHeight;
+        document.documentElement.style.setProperty(
+          '--vh',
+          `${viewportHeight * 0.01}px`
+        );
+      }
+    };
+
+    // Listen for visual viewport changes (for virtual keyboard)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener(
+        'resize',
+        handleVisualViewportChange
+      );
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener(
+          'resize',
+          handleVisualViewportChange
+        );
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -187,31 +222,35 @@ export default function ChatPage() {
         style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
       >
         {/* Chat Area - Left */}
-        <div className='flex-1 flex flex-col bg-white/20 backdrop-blur-md p-2 sm:p-2 md:p-2'>
+        <div className='flex-1 flex flex-col bg-white/20 backdrop-blur-md relative'>
           {chats.length === 0 ? (
             <EmptyState onCreateNewChat={createNewChat} />
           ) : (
             <>
               {/* Chat Session Title */}
-              <div className='sticky top-5 z-10 bg-white border-b border-gray-300 pb-3'>
+              <div className='sticky top-0 z-10 bg-white border-b border-gray-300 p-2 shadow-sm'>
                 <h2 className='text-lg md:text-xl font-bold text-gray-900 text-center'>
                   {currentChat?.title || 'Select a chat'}
                 </h2>
               </div>
+
               {/* Messages Container with individual chat loading */}
-              {chatLoading ? (
-                <div className='flex-1 flex items-center justify-center'>
-                  <Loader />
-                </div>
-              ) : (
-                <MessagesContainer
-                  messages={messages}
-                  audioBlob={audioBlob}
-                  onSendAudio={handleSendAudio}
-                  chatId={currentChat?.chatId}
-                  token={token || undefined}
-                />
-              )}
+              <div className='flex-1 overflow-hidden flex flex-col'>
+                {chatLoading ? (
+                  <div className='flex-1 flex items-center justify-center'>
+                    <Loader />
+                  </div>
+                ) : (
+                  <MessagesContainer
+                    messages={messages}
+                    audioBlob={audioBlob}
+                    onSendAudio={handleSendAudio}
+                    chatId={currentChat?.chatId}
+                    token={token || undefined}
+                  />
+                )}
+              </div>
+
               <ChatInput
                 input={input}
                 setInput={setInput}
