@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Formik, Form, ErrorMessage, Field } from 'formik';
+import { Formik, Form,  Field } from 'formik';
 import * as Yup from 'yup';
 import { login as loginApi, register as registerApi } from '../../api/auth';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
@@ -201,11 +201,6 @@ export default function Signup() {
                 type='text'
                 placeholder='Enter your username'
               />
-              <ErrorMessage
-                name='username'
-                component='div'
-                className='text-red-500 text-sm mt-1'
-              />
             </div>
 
             <div>
@@ -218,11 +213,6 @@ export default function Signup() {
                 name='email'
                 type='email'
                 placeholder='Enter your email'
-              />
-              <ErrorMessage
-                name='email'
-                component='div'
-                className='text-red-500 text-sm mt-1'
               />
             </div>
 
@@ -241,11 +231,6 @@ export default function Signup() {
                   />
                 )}
               </Field>
-              <ErrorMessage
-                name='password'
-                component='div'
-                className='text-red-500 text-sm mt-1'
-              />
             </div>
 
             <div>
@@ -263,11 +248,6 @@ export default function Signup() {
                   />
                 )}
               </Field>
-              <ErrorMessage
-                name='confirmPassword'
-                component='div'
-                className='text-red-500 text-sm mt-1'
-              />
             </div>
 
             <Button
