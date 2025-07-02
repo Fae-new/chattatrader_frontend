@@ -26,7 +26,6 @@ const Discover: React.FC = () => {
   const [showTradeModal, setShowTradeModal] = useState<TrendingToken | null>(
     null
   );
-  const [loading, setLoading] = useState(false);
   const [trendingTokens, setTrendingTokens] = useState<{
     solana: { tokens: TrendingToken[] };
     ethereum: { tokens: TrendingToken[] };
@@ -68,6 +67,13 @@ const Discover: React.FC = () => {
             chain: 'ethereum',
             price: '$2,345.67',
           },
+          {
+            id: '3', 
+            name: 'Base',
+            symbol: 'BASE',
+            chain: 'base',
+            price: '$1.23',
+          },
         ].filter(
           (item) =>
             item.name.toLowerCase().includes(query.toLowerCase()) ||
@@ -79,13 +85,7 @@ const Discover: React.FC = () => {
   };
 
   const handleChainClick = (chain: Chain) => {
-    if (selectedChain === chain) {
-      return;
-    } else {
-      setLoading(true);
-      setSelectedChain(chain);
-      setLoading(false);
-    }
+    setSelectedChain(chain);
   };
 
   const getChainLabel = (chain: Chain) => {
@@ -133,14 +133,13 @@ const Discover: React.FC = () => {
           ethereum: { tokens: [] },
           base: { tokens: [] },
         });
+        console.error("Failed to fetch trending tokens:", error);
       } finally {
         setTrendingLoading(false);
       }
     };
     fetchTrending();
-  }, [selectedChain]);
-
-  if (loading) return <div className='text-gray-600'>No Discovery Found</div>;
+  }, []); 
 
   return (
     <div className='pt-2 px-4 md:px-6 lg:px-10 space-y-6 bg-[#FFFFFF] min-h-screen'>
@@ -169,7 +168,6 @@ const Discover: React.FC = () => {
             <SearchResults
               results={searchResults}
               onSelect={(result) => {
-                // Handle selection
                 console.log(result);
                 setSearchQuery('');
                 setSearchResults([]);
@@ -179,12 +177,10 @@ const Discover: React.FC = () => {
           </div>
         </div>
       </div>
-      {/* Trending Section with Tabs */}
       <div className='w-full max-w-7xl mx-auto space-y-4'>
         <h2 className='text-xl md:text-2xl font-semibold text-[#0f172a]'>
           Trending Tokens
         </h2>
-        {/* Subheading showing selected tab */}
         <p className='text-sm text-[#475569] font-medium'>
           Trending on {getChainLabel(selectedChain)}
         </p>
@@ -201,8 +197,8 @@ const Discover: React.FC = () => {
                 className={`px-4 py-2 text-sm font-medium transition-all duration-200 ease-out rounded-md relative
                 ${
                   selectedChain === chain
-                    ? 'bg-[#007b83] !text-white shadow-sm ring-2 ring-[#007b83]/20 scale-[1.02]'
-                    : 'bg-white text-gray-600 hover:text-[#007b83] hover:bg-[#007b83]/5 hover:scale-[1.02]'
+                    ? 'bg-[#007b83] text-white shadow-sm ring-2 ring-[#007b83]/20' 
+                    : 'bg-white text-gray-600 hover:text-[#007b83] hover:bg-[#007b83]/5'
                 }`}
               >
                 {getChainLabel(chain)}
@@ -211,9 +207,7 @@ const Discover: React.FC = () => {
           </TabsList>
 
           {(['solana', 'ethereum', 'base'] as Chain[]).map((chain) => (
-
-          <TabsContent key={chain} value={chain}>
-             {selectedChain === chain && (
+            <TabsContent key={chain} value={chain}>
               <TrendingList
                 chain={chain}
                 loading={trendingLoading}
@@ -221,11 +215,10 @@ const Discover: React.FC = () => {
                 onDetails={setShowDetails}
                 onTrade={setShowTradeModal}
               />
-            )}
-          </TabsContent>
-        ))}
-       </Tabs>
-    </div>
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
 
       {/* Modals */}
       {showTradeModal && tradeAction && (
