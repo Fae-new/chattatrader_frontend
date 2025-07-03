@@ -140,12 +140,8 @@ const Discover: React.FC = () => {
     };
     fetchTrending();
   }, []);
-
   return (
-    <div
-      className='pt-2 px-4 md:px-6 lg:px-10 space-y-6 bg-[#FFFFFF]'
-      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
-    >
+    <div className='pt-2 px-4 md:px-6 lg:px-10 space-y-6 bg-[#FFFFFF] min-h-screen'>
       <div className='w-full max-w-7xl mx-auto'>
         <h1 className='text-xl md:text-2xl font-bold text-center text-[#0f172a]'>
           Discover

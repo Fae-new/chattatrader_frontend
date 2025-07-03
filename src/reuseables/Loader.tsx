@@ -1,9 +1,6 @@
 const Loader = () => {
   return (
-    <div
-      className='flex items-center justify-center'
-      style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
-    >
+    <div className='flex items-center justify-center h-screen'>
       <div className='w-12 h-12 border-4 border-gray-300 border-t-[#007b83]  rounded-full animate-spin' />
     </div>
   );

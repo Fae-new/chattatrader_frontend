@@ -149,8 +149,7 @@ export default function ChatPage() {
     if (audioBlob) {
       sendMessage(audioBlob, MessageType.AUDIO);
     }
-  };
-  // Add this handler to update chat title in state
+  }; // Add this handler to update chat title in state
   const handleChatTitleUpdated = (updatedChat: Chat) => {
     setChats((prev) =>
       prev.map((c) => (c.chatId === updatedChat.chatId ? updatedChat : c))
@@ -159,50 +158,10 @@ export default function ChatPage() {
       setCurrentChat(updatedChat);
     }
   };
-
-  // Add an effect to handle viewport changes - placed before conditional rendering to follow React Hook rules
-  useEffect(() => {
-    const handleVisualViewportChange = () => {
-      // This helps adjust when keyboard appears
-      if (
-        document.activeElement instanceof HTMLInputElement ||
-        document.activeElement instanceof HTMLTextAreaElement
-      ) {
-        // When input is focused (keyboard likely visible)
-        const viewportHeight =
-          window.visualViewport?.height || window.innerHeight;
-        document.documentElement.style.setProperty(
-          '--vh',
-          `${viewportHeight * 0.01}px`
-        );
-      }
-    };
-
-    // Listen for visual viewport changes (for virtual keyboard)
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener(
-        'resize',
-        handleVisualViewportChange
-      );
-    }
-
-    return () => {
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener(
-          'resize',
-          handleVisualViewportChange
-        );
-      }
-    };
-  }, []);
-
   // Show full page loader while initial chats are loading
   if (loading) {
     return (
-      <div
-        className='flex items-center justify-center'
-        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
-      >
+      <div className='flex items-center justify-center h-screen'>
         <Loader />
       </div>
     );
@@ -215,12 +174,8 @@ export default function ChatPage() {
         onClick={() => setIsChatsOpen(!isChatsOpen)}
       >
         <FaComments size={20} />
-      </button>
-
-      <div
-        className='flex flex-col overflow-hidden'
-        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
-      >
+      </button>{' '}
+      <div className='flex flex-col overflow-hidden h-screen'>
         {/* Chat Area - Left */}
         <div className='flex-1 flex flex-col bg-white/20 backdrop-blur-md relative'>
           {chats.length === 0 ? (

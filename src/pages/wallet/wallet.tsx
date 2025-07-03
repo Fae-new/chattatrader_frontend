@@ -222,10 +222,7 @@ const Wallet: React.FC = () => {
     setIsImportModalOpen(false);
   };
   return (
-    <div
-      className='bg-gradient-to-b from-gray-50 to-white p-2 pt-0 md:p-6'
-      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
-    >
+    <div className='bg-gradient-to-b from-gray-50 to-white p-2 pt-0 md:p-6 min-h-screen'>
       {/* Header */}{' '}
       <header className='flex justify-end md:justify-between items-center sm:p-4 mb-4 md:mb-6 relative z-10'>
         <div className='flex flex-row-reverse md:flex-row items-center gap-3'>

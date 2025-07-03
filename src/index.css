@@ -35,35 +35,12 @@
   background-clip: content-box;
 }
 
-/* Fix for iOS mobile viewport issues */
-html, body {
-  height: 100%;
-  overflow: hidden;
-  position: fixed;
-  width: 100%;
-  overscroll-behavior-y: none; /* Prevent pull-to-refresh */
-}
-
 body {
   margin: 0;
   /* display: flex; */
   /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
-}
-
-/* Fix for virtual keyboard on mobile */
-@supports (-webkit-touch-callout: none) {
-  /* iOS specific styles */
-  body {
-    /* Prevents Safari from doing its own viewport adjustments */
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Prevent content from being pushed up when keyboard appears */
-  input, textarea {
-    font-size: 16px; /* Prevents zoom on focus in iOS */
-  }
 }
 
 

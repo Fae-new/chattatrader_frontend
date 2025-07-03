@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 
 const SidebarLayout = () => (
-  <div className='flex' style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
+  <div className='flex h-screen'>
     {/* Desktop sidebar container - only takes space on md+ screens */}
     <div className='hidden md:block md:w-64'>
       <Sidebar />

@@ -51,12 +51,8 @@ export default function History() {
 
     fetchTrades();
   }, []);
-
   return (
-    <div
-      className='px-6 bg-gray-50 min-h-screen backdrop-blur-md'
-      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
-    >
+    <div className='px-6 bg-gray-50 min-h-screen backdrop-blur-md'>
       {/* Header */}
       <div className='mb-6 sm:mt-6'>
         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6'>

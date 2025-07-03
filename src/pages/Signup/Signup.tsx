@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Formik, Form,  Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { login as loginApi, register as registerApi } from '../../api/auth';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
@@ -118,8 +118,7 @@ export default function Signup() {
       <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={loginValidationSchema}
-        onSubmit={handleLoginSubmit}
-      >
+        onSubmit={handleLoginSubmit}      >
         {({ isSubmitting }) => (
           <Form className='space-y-4'>
             <div>
@@ -133,14 +132,8 @@ export default function Signup() {
                 type='email'
                 placeholder='Enter your email'
               />
-              <ErrorMessage
-                name='email'
-                component='div'
-                className='text-red-500 text-sm mt-1'
-              />
             </div>
-            <div>
-              <Label htmlFor='password' className='block text-left mb-1'>
+            <div>              <Label htmlFor='password' className='block text-left mb-1'>
                 Password
               </Label>
               <Field name='password'>
@@ -185,8 +178,7 @@ export default function Signup() {
           password: '',
           confirmPassword: '',
         }}
-        validationSchema={signupValidationSchema}
-        onSubmit={handleSignupSubmit}
+        validationSchema={signupValidationSchema}        onSubmit={handleSignupSubmit}
       >
         {({ isSubmitting }) => (
           <Form className='space-y-4'>
@@ -216,8 +208,7 @@ export default function Signup() {
               />
             </div>
 
-            <div>
-              <Label htmlFor='password' className='block text-left mb-1'>
+            <div>              <Label htmlFor='password' className='block text-left mb-1'>
                 Password
               </Label>
               <Field name='password'>
@@ -231,6 +222,11 @@ export default function Signup() {
                   />
                 )}
               </Field>
+              <ErrorMessage
+                name='password'
+                component='div'
+                className='text-red-500 text-sm mt-1'
+              />
             </div>
 
             <div>
@@ -248,6 +244,11 @@ export default function Signup() {
                   />
                 )}
               </Field>
+              <ErrorMessage
+                name='confirmPassword'
+                component='div'
+                className='text-red-500 text-sm mt-1'
+              />
             </div>
 
             <Button
@@ -290,12 +291,8 @@ export default function Signup() {
       </Formik>
     );
   };
-
   return (
-    <div
-      className='flex flex-col md:flex-row w-full'
-      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
-    >
+    <div className='flex flex-col md:flex-row w-full min-h-screen'>
       <Toaster position='top-center' />
       <div className='w-full md:w-1/2 flex flex-col'>
         <div className='max-w-md mx-auto'>

@@ -49,11 +49,11 @@ export default function Sidebar() {
 
   return (
     <>
+      {' '}
       <aside
-        className={`w-64 fixed md:relative z-40 p-4 flex flex-col justify-between
+        className={`w-64 fixed md:relative z-40 p-4 flex flex-col justify-between h-screen
     bg-white/10 backdrop-blur-lg rounded-r-xl shadow-lg transition-all duration-300 ease-in-out
     ${isOpen ? 'left-0' : '-left-64 md:left-0'}`}
-        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
       >
         <div>
           <div className='flex items-center justify-between mb-6'>
@@ -131,14 +131,12 @@ export default function Sidebar() {
           </div>
         </div>
       </aside>
-
       {isOpen && (
         <div
           className='md:hidden fixed inset-0 bg-auto bg-opacity-30 z-30'
           onClick={toggleSidebar}
         />
       )}
-
       {!isOpen && (
         <button
           className='md:hidden fixed top-2 left-2 z-50 p-2 bg-[#007b83] text-white rounded cursor-pointer'

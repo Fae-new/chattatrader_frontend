@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as Yup from 'yup';
-import { useNavigate, Navigate} from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { verifyCode, requestCode } from '../../api/auth';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { Card, CardContent } from '../../reuseables/Card';
@@ -12,7 +12,7 @@ import {
 } from '../../reuseables/input-otp';
 import { Label } from '../../reuseables/label';
 import { Button } from '../../reuseables/button';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 const otpValidationSchema = Yup.object({
   otp: Yup.string()
@@ -42,30 +42,23 @@ const VerifyOtp: React.FC = () => {
   }, [email]);
 
   if (!email) {
-    return <Navigate to="/signup" replace />;
+    return <Navigate to='/signup' replace />;
   }
-
-  
 
   const handleResendOTP = async () => {
     setError('');
     setIsResending(true);
     try {
       await requestCode({ email });
-      toast.success("OTP resent successfully!");
+      toast.success('OTP resent successfully!');
     } catch (err: unknown) {
       setError('Failed to resend OTP. Please try again.');
     } finally {
       setIsResending(false);
     }
   };
-
   return (
-    <div className='flex h-screen w-full'>
-    <div
-      className='flex w-full'
-      style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
-    >
+    <div className='flex w-full min-h-screen'>
       <Toaster position='top-center' />
       <div className='w-full md:w-1/2 bg-gray-100 flex flex-col justify-center px-4 sm:px-6 lg:px-20 xl:px-24'>
         <div className='w-full max-w-sm mx-auto'>
@@ -90,17 +83,17 @@ const VerifyOtp: React.FC = () => {
               <Formik
                 initialValues={{ otp: '' }}
                 validationSchema={otpValidationSchema}
-               onSubmit={async (values, { setSubmitting }) => {
-                setError('');
-                try {
-                await verifyCode({ code: values.otp, email });
-                navigate('/sign-up'); 
-               } catch (err: unknown) {
-               console.error(err);
-               setError('Failed to verify code. Please try again.');
-               }
-               setSubmitting(false);
-               }}
+                onSubmit={async (values, { setSubmitting }) => {
+                  setError('');
+                  try {
+                    await verifyCode({ code: values.otp, email });
+                    navigate('/sign-up');
+                  } catch (err: unknown) {
+                    console.error(err);
+                    setError('Failed to verify code. Please try again.');
+                  }
+                  setSubmitting(false);
+                }}
               >
                 {({
                   values,
@@ -113,15 +106,14 @@ const VerifyOtp: React.FC = () => {
                     <div className='space-y-2'>
                       <div className='text-left'>
                         <Label htmlFor='otp'>Verification Code</Label>
-                      </div>
-                      <div className='flex justify-center items-center'>
+                      </div>                      <div className='flex justify-center items-center'>
                         <InputOTP
-                          type="text"
                           maxLength={6}
                           value={values.otp}
                           onChange={(value) => setFieldValue('otp', value)}
                           onBlur={handleBlur}
                           name='otp'
+                          inputMode='text'
                         >
                           <InputOTPGroup>
                             <InputOTPSlot index={0} />
