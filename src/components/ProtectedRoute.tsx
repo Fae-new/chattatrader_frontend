@@ -10,15 +10,22 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const location = useLocation();
 
   if (!isAuthenticated) {
+    const chattaTraderNewUser = localStorage.getItem('chattaTraderNewUser');
+    if (chattaTraderNewUser) {
+      return (
+        <Navigate to='/sign-up' state={{ from: location.pathname }} replace />
+      );
+    }
+    localStorage.setItem('chattaTraderNewUser', 'true');
     return <Navigate to='/' state={{ from: location.pathname }} replace />;
   }
   if (!user?.isVerified) {
     return (
       <Navigate
-      to={`/verify-otp?email=${encodeURIComponent(user?.email ?? '')}`}
-      state={{ from: location.pathname }}
-      replace
-    />
+        to={`/verify-otp?email=${encodeURIComponent(user?.email ?? '')}`}
+        state={{ from: location.pathname }}
+        replace
+      />
     );
   }
 
