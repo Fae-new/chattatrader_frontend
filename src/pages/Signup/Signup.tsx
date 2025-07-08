@@ -109,23 +109,6 @@ export default function Signup() {
     }
   };
 
-    const result = await registerApi({ username, email, password });
-
-    if (result?.token && result?.user) {
-      login({
-        userWithoutPassword: result.user, 
-        token: result.token,
-      });
-      toast.success('Signup successful!');
-      navigate('/app/discover');
-    } else {
-      toast.success('Signup successful! Please verify your email.');
-      navigate(`/verify-otp?email=${encodeURIComponent(email)}`);
-    }
-  } catch (e: unknown) {
-    handleApiError(e, 'Signup failed');
-  }
-};
   const PasswordInput = ({
     id,
     field, // <-- from Formik's <Field>

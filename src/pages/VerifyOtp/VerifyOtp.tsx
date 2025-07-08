@@ -87,7 +87,7 @@ const VerifyOtp: React.FC = () => {
                   setError('');
                   try {
                     await verifyCode({ code: values.otp, email });
-                    navigate('/sign-up');
+                    navigate('/app/discover');
                   } catch (err: unknown) {
                     console.error(err);
                     setError('Failed to verify code. Please try again.');
