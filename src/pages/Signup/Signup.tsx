@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { login as loginApi, register as registerApi } from '../../api/auth';
@@ -11,6 +11,9 @@ import Input from '../../reuseables/input';
 import { Button } from '../../reuseables/button';
 import { Toaster, toast } from 'react-hot-toast';
 import type { FieldProps, FieldInputProps } from 'formik';
+import Captcha from '../../components/Captcha';
+import type { CaptchaRef } from '../../components/Captcha';
+import { RECAPTCHA_SITE_KEY } from '../../lib/recaptcha';
 
 const signupValidationSchema = Yup.object({
   username: Yup.string().required('Username is required'),
@@ -21,14 +24,18 @@ const signupValidationSchema = Yup.object({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')
     .required('Confirm password is required'),
+  captcha: Yup.string().required('Please complete the CAPTCHA'),
 });
 const loginValidationSchema = Yup.object({
   email: Yup.string().email('Invalid email').required('Email is required'),
   password: Yup.string().required('Password is required'),
+  captcha: Yup.string().required('Please complete the CAPTCHA'),
 });
 
 export default function Signup() {
   const [selectedTab, setSelectedTab] = useState<string>('login');
+  const loginCaptchaRef = useRef<CaptchaRef>(null);
+  const signupCaptchaRef = useRef<CaptchaRef>(null);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -50,28 +57,55 @@ export default function Signup() {
   const handleLoginSubmit = async (vals: {
     email: string;
     password: string;
+    captcha: string;
   }) => {
     try {
-      const user = await loginApi(vals);
+      // Verify CAPTCHA token exists
+      if (!vals.captcha) {
+        toast.error('Please complete the CAPTCHA');
+        return;
+      }
+
+      const user = await loginApi({
+        email: vals.email,
+        password: vals.password,
+        captchaToken: vals.captcha,
+      });
       login(user);
       toast.success('Login successful!');
       navigate('/app/discover');
     } catch (e) {
       handleApiError(e, 'Login failed');
+      // Reset CAPTCHA on error
+      loginCaptchaRef.current?.reset();
     }
   };
   const handleSignupSubmit = async (vals: {
     username: string;
     email: string;
     password: string;
+    captcha: string;
   }) => {
     try {
+      // Verify CAPTCHA token exists
+      if (!vals.captcha) {
+        toast.error('Please complete the CAPTCHA');
+        return;
+      }
+
       const { username, email, password } = vals;
-      await registerApi({ username, email, password });
+      await registerApi({
+        username,
+        email,
+        password,
+        captchaToken: vals.captcha,
+      });
       toast.success('Signup successful!');
       navigate(`/verify-otp?email=${encodeURIComponent(email)}`);
     } catch (e: unknown) {
       handleApiError(e, 'Signup failed');
+      // Reset CAPTCHA on error
+      signupCaptchaRef.current?.reset();
     }
   };
 
@@ -116,9 +150,10 @@ export default function Signup() {
 
     return (
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ email: '', password: '', captcha: '' }}
         validationSchema={loginValidationSchema}
-        onSubmit={handleLoginSubmit}      >
+        onSubmit={handleLoginSubmit}
+      >
         {({ isSubmitting }) => (
           <Form className='space-y-4'>
             <div>
@@ -133,7 +168,9 @@ export default function Signup() {
                 placeholder='Enter your email'
               />
             </div>
-            <div>              <Label htmlFor='password' className='block text-left mb-1'>
+            <div>
+              {' '}
+              <Label htmlFor='password' className='block text-left mb-1'>
                 Password
               </Label>
               <Field name='password'>
@@ -146,13 +183,44 @@ export default function Signup() {
                     placeholder='Enter your password'
                   />
                 )}
-              </Field>
+              </Field>{' '}
               <ErrorMessage
                 name='password'
                 component='div'
                 className='text-red-500 text-sm mt-1'
               />
             </div>
+            {/* CAPTCHA for Login */}
+            <div className='flex justify-center'>
+              <Field name='captcha'>
+                {({ form }: FieldProps) => (
+                  <div>
+                    <Captcha
+                      ref={loginCaptchaRef}
+                      siteKey={RECAPTCHA_SITE_KEY}
+                      onChange={(token) => {
+                        form.setFieldValue('captcha', token || '');
+                      }}
+                      onError={() => {
+                        form.setFieldValue('captcha', '');
+                        toast.error('CAPTCHA error. Please try again.');
+                      }}
+                      onExpired={() => {
+                        form.setFieldValue('captcha', '');
+                        toast.error('CAPTCHA expired. Please verify again.');
+                      }}
+                      className='mb-2'
+                    />
+                    <ErrorMessage
+                      name='captcha'
+                      component='div'
+                      className='text-red-500 text-sm text-center'
+                    />
+                  </div>
+                )}
+              </Field>
+            </div>
+
             <Button
               type='submit'
               className='w-full py-2 bg-[#008080] text-white'
@@ -177,8 +245,10 @@ export default function Signup() {
           email: '',
           password: '',
           confirmPassword: '',
+          captcha: '',
         }}
-        validationSchema={signupValidationSchema}        onSubmit={handleSignupSubmit}
+        validationSchema={signupValidationSchema}
+        onSubmit={handleSignupSubmit}
       >
         {({ isSubmitting }) => (
           <Form className='space-y-4'>
@@ -194,7 +264,6 @@ export default function Signup() {
                 placeholder='Enter your username'
               />
             </div>
-
             <div>
               <Label htmlFor='email' className='block text-left mb-1'>
                 Email
@@ -207,8 +276,9 @@ export default function Signup() {
                 placeholder='Enter your email'
               />
             </div>
-
-            <div>              <Label htmlFor='password' className='block text-left mb-1'>
+            <div>
+              {' '}
+              <Label htmlFor='password' className='block text-left mb-1'>
                 Password
               </Label>
               <Field name='password'>
@@ -228,7 +298,6 @@ export default function Signup() {
                 className='text-red-500 text-sm mt-1'
               />
             </div>
-
             <div>
               <Label htmlFor='confirmPassword' className='block text-left mb-1'>
                 Confirm Password
@@ -243,14 +312,43 @@ export default function Signup() {
                     placeholder='Confirm your password'
                   />
                 )}
-              </Field>
+              </Field>{' '}
               <ErrorMessage
                 name='confirmPassword'
                 component='div'
                 className='text-red-500 text-sm mt-1'
               />
+            </div>{' '}
+            {/* CAPTCHA for Signup */}
+            <div className='flex justify-center'>
+              <Field name='captcha'>
+                {({ form }: FieldProps) => (
+                  <div>
+                    <Captcha
+                      ref={signupCaptchaRef}
+                      siteKey={RECAPTCHA_SITE_KEY}
+                      onChange={(token) => {
+                        form.setFieldValue('captcha', token || '');
+                      }}
+                      onError={() => {
+                        form.setFieldValue('captcha', '');
+                        toast.error('CAPTCHA error. Please try again.');
+                      }}
+                      onExpired={() => {
+                        form.setFieldValue('captcha', '');
+                        toast.error('CAPTCHA expired. Please verify again.');
+                      }}
+                      className='mb-2'
+                    />
+                    <ErrorMessage
+                      name='captcha'
+                      component='div'
+                      className='text-red-500 text-sm text-center'
+                    />
+                  </div>
+                )}
+              </Field>
             </div>
-
             <Button
               type='submit'
               className='w-full py-2 bg-[#008080] text-white'
@@ -258,7 +356,6 @@ export default function Signup() {
             >
               {isSubmitting ? 'Signing up…' : 'Sign Up'}
             </Button>
-
             <div className='flex items-center my-4'>
               <hr className='flex-grow border-gray-300' />
               <span className='px-2 text-sm text-gray-500'>
@@ -266,11 +363,9 @@ export default function Signup() {
               </span>
               <hr className='flex-grow border-gray-300' />
             </div>
-
             <div className='flex align-middle justify-center'>
               <img src='/images/frames.svg' alt='Google' className='w-7 h-7' />
             </div>
-
             <p
               className='text-sm sm:text-base text-[#7B7B7B] 
                 font-normal text-center sm:text-left mt-4

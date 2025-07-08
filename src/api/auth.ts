@@ -4,12 +4,14 @@ import instance from './client';
 type LoginRequest = {
   email: string;
   password: string;
+  captchaToken?: string; // Optional for backward compatibility
 };
 
 type RegisterRequest = {
   username: string;
   email: string;
   password: string;
+  captchaToken?: string; // Optional for backward compatibility
 };
 
 type RequestCodeRequest = {
