@@ -68,7 +68,7 @@ const pricingList: PricingPlan[] = [
 
 export const Pricing: React.FC = () => {
   const handleSelectPlan = (plan: string) => {
-    console.log(`Selected plan: ${plan}`);
+    `Selected plan: ${plan}`;
   };
 
   return (

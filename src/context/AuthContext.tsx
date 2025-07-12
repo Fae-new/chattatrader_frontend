@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setIsAuthenticated(true);
       } catch (error) {
         // If failed, user is not authenticated (no valid cookie)
-        console.log('No valid authentication found');
+        ('No valid authentication found');
         setUser(null);
         setIsAuthenticated(false);
       } finally {
@@ -57,7 +57,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setUser(null);
     setIsAuthenticated(false);
     try {
-      // Call logout endpoint to clear server-side cookie
       await logoutAPI();
     } catch (error) {
       console.error('Logout error:', error);

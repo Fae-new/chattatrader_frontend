@@ -14,16 +14,15 @@ export const useSocket = (onMessage: (message: Message) => void) => {
     });
 
     socketRef.current.on('connect', () => {
-      console.log('Connected to Socket.IO server');
+      ('Connected to Socket.IO server');
     });
 
     socketRef.current.on('disconnect', () => {
-      console.log('Disconnected from Socket.IO server');
+      ('Disconnected from Socket.IO server');
     });
 
     socketRef.current.on('response', (data: any) => {
       try {
-        console.log('Socket response received:', data);
         const parsedData = data as Message;
         onMessage(parsedData);
       } catch (error) {

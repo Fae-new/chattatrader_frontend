@@ -35,7 +35,10 @@ const VerifyOtp: React.FC = () => {
   ) => {
     setError('');
     try {
-      await verifyCode({ code: values.otp, email: email! });
+      user;
+      if (!user?.email) return;
+
+      await verifyCode({ code: values.otp, email: email as string });
 
       const userData = await getUserWithToken();
       login(userData);

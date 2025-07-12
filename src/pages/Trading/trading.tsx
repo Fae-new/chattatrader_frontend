@@ -4,7 +4,7 @@ import { Button } from '../../reuseables/button';
 import { FaTimes, FaSearch, FaInfoCircle } from 'react-icons/fa';
 import { getUserBalance } from '../../api/balances';
 import { useAuth } from '../../context/AuthContext';
-import { buyToken, sellToken } from '../../api/trading';
+// import { buyToken, sellToken } from '../../api/trading';
 import type { TokenItem } from '../wallet/types';
 import type { TokenData } from '../discovery/types';
 import { getTokenDetails } from '../../api/transactions';
@@ -155,10 +155,10 @@ export default function Trading() {
 
     setIsSubmitting(true);
     try {
-      const response = await buyToken({
-        amountInUsd: buyAmount,
-        tokenAddress: contractAddress,
-      });
+      // const _response = await buyToken({
+      //   amountInUsd: buyAmount,
+      //   tokenAddress: contractAddress,
+      // });
 
       toast.success(`Bought $${buyAmount} worth of ${tokenInfo.token.symbol}`);
 
@@ -167,8 +167,6 @@ export default function Trading() {
       setTokenInfo(null);
       setBuyAmount('');
       setErrors({});
-
-      console.log('Buy response:', response);
     } catch (error) {
       console.error('Buy error:', error);
       toast.error('Buy failed. Please try again.');
@@ -182,10 +180,10 @@ export default function Trading() {
 
     setIsSubmitting(true);
     try {
-      const response = await sellToken({
-        percentage: sellPercentage,
-        tokenAddress: selectedToken.address,
-      });
+      // const response = await sellToken({
+      //   percentage: sellPercentage,
+      //   tokenAddress: selectedToken.address,
+      // });
 
       const tokensToSell =
         (selectedToken.balance * parseFloat(sellPercentage)) / 100;
@@ -198,8 +196,6 @@ export default function Trading() {
       setSellPercentage('');
       setSellModalOpen(false);
       setErrors({});
-
-      console.log('Sell response:', response);
     } catch (error) {
       console.error('Sell error:', error);
       toast.error('Sell failed. Please try again.');

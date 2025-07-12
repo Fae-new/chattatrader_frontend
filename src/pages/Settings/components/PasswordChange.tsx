@@ -7,8 +7,6 @@ export default function PasswordSection() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     // Handle password change logic here
-    console.log('Old password:', oldPassword);
-    console.log('New password:', newPassword);
   };
 
   return (

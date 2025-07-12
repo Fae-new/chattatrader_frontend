@@ -40,7 +40,6 @@ export default function History() {
       try {
         const transactions = await getTransactionHistory(user?.id ?? '');
         setTransactions(transactions);
-        console.log('Response:', transactions);
       } catch (error) {
         console.error('Error fetching trades:', error);
       }

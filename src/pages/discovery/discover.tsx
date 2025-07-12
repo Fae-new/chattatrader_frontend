@@ -167,7 +167,7 @@ const Discover: React.FC = () => {
             <SearchResults
               results={searchResults}
               onSelect={(result) => {
-                console.log(result);
+                result;
                 setSearchQuery('');
                 setSearchResults([]);
               }}

@@ -8,8 +8,6 @@ export default function ProfileSection() {
 
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle profile update logic here
-    console.log('Profile data:', formData);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
