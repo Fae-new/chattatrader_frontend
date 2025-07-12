@@ -11,32 +11,26 @@ interface MessageRendererProps {
   message: Message;
   index: number;
   chatId?: string;
-  token?: string;
 }
 
 export const MessageRenderer: React.FC<MessageRendererProps> = ({
   message,
   index,
   chatId,
-  token,
 }) => {
   const isUser = message.role === 'user';
-
   const handleTradeConfirm = async () => {
-    if (!chatId || !token || !message.tradeData) {
+    if (!chatId || !message.tradeData) {
       throw new Error('Missing required data for trade execution');
     }
 
     try {
       if (message.tradeData.type === 'buy') {
-        const response = await buyChatToken(
-          {
-            chatId,
-            amountInUsd: message.tradeData.amount.toString(),
-            tokenAddress: message.tradeData.address,
-          },
-          token
-        );
+        const response = await buyChatToken({
+          chatId,
+          amountInUsd: message.tradeData.amount.toString(),
+          tokenAddress: message.tradeData.address,
+        });
 
         return {
           hash: response.data.transactionHash || '',
@@ -44,14 +38,11 @@ export const MessageRenderer: React.FC<MessageRendererProps> = ({
           success: response.success,
         };
       } else if (message.tradeData.type === 'sell') {
-        const response = await sellChatToken(
-          {
-            chatId,
-            percentage: message.tradeData.amount.toString(),
-            tokenAddress: message.tradeData.address,
-          },
-          token
-        );
+        const response = await sellChatToken({
+          chatId,
+          percentage: message.tradeData.amount.toString(),
+          tokenAddress: message.tradeData.address,
+        });
 
         return {
           hash: response.data.transactionHash || '',

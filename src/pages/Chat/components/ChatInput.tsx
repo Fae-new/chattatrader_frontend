@@ -43,9 +43,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         className='hidden'
         ref={fileInputRef}
         onChange={handleImageUpload}
-      />
-
-      <div className='flex gap-2 w-full sticky bottom-0 bg-white/60 backdrop-blur-md py-3 px-1'>
+      />{' '}
+      <div className='flex gap-2 w-full bg-white/60 backdrop-blur-md py-3 px-1 flex-shrink-0'>
         <div className='flex-1 min-w-0'>
           <input
             type='text'

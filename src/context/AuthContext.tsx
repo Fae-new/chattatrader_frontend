@@ -6,16 +6,14 @@ import {
   type ReactNode,
 } from 'react';
 import { type User } from './types';
+import { getUserWithToken, logout as logoutAPI } from '../api/auth';
 
 type AuthContextType = {
   user: Partial<User> | null;
-  login: (userData: {
-    userWithoutPassword: Partial<User>;
-    token: string;
-  }) => void;
+  login: (userData: { userWithoutPassword: Partial<User> }) => void;
   logout: () => void;
   isAuthenticated: boolean;
-  token: string | null;
+  isLoading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,39 +24,49 @@ type AuthProviderProps = {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<Partial<User> | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Check for existing authentication via cookies on app start
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-      setIsAuthenticated(true);
-    }
+    const checkAuthStatus = async () => {
+      try {
+        setIsLoading(true);
+        const userData = await getUserWithToken();
+        // If successful, user is authenticated
+        setUser(userData.userWithoutPassword);
+        setIsAuthenticated(true);
+      } catch (error) {
+        // If failed, user is not authenticated (no valid cookie)
+        console.log('No valid authentication found');
+        setUser(null);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthStatus();
   }, []);
 
-  const login = (userData: {
-    userWithoutPassword: Partial<User>;
-    token: string;
-  }) => {
-    if (userData.token) {
-      setToken(userData.token);
-      localStorage.setItem('token', userData.token);
-      setIsAuthenticated(true);
-      setUser(userData.userWithoutPassword);
-    }
+  const login = (userData: { userWithoutPassword: Partial<User> }) => {
+    setIsAuthenticated(true);
+    setUser(userData.userWithoutPassword);
   };
-
-  const logout = () => {
+  const logout = async () => {
     setUser(null);
-    setToken(null);
     setIsAuthenticated(false);
-    localStorage.removeItem('token');
+    try {
+      // Call logout endpoint to clear server-side cookie
+      await logoutAPI();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, isAuthenticated, token }}
+      value={{ user, login, logout, isAuthenticated, isLoading }}
     >
       {children}
     </AuthContext.Provider>

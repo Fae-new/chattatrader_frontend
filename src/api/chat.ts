@@ -3,7 +3,6 @@ import instance from './client';
 
 type CreateChatRequest = {
   userId: string;
-  token: string;
 };
 type GetChatsReponse = { success: boolean; message: string; data: Chat[] };
 type GetChatReponse = { success: boolean; message: string; data: Chat };
@@ -14,15 +13,7 @@ export const CreateChatRequest = async (
   data: CreateChatRequest
 ): Promise<Chat> => {
   return instance
-    .post<CreateChatReponse>(
-      '/chats/createchat',
-      { userId: data.userId },
-      {
-        headers: {
-          Authorization: `Bearer ${data.token}`,
-        },
-      }
-    )
+    .post<CreateChatReponse>('/chats/createchat', { userId: data.userId })
     .then((res) => res.data.data);
 };
 
@@ -30,9 +21,6 @@ export const getChats = async (userId: string): Promise<Chat[]> => {
   return instance
     .get<GetChatsReponse>('/chats/getchats', {
       params: { userId },
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
     .then((res) => res.data.data);
 };
@@ -40,28 +28,16 @@ export const getChatById = async (chatId: string): Promise<Chat> => {
   return instance
     .get<GetChatReponse>('/chats/getchat', {
       params: { chatId },
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
     .then((res) => res.data.data);
 };
 
 export const updateChatTitle = async (
   chatId: string,
-  title: string,
-  token: string
+  title: string
 ): Promise<Chat> => {
   return instance
-    .put<{ data: Chat }>(
-      '/chats/editchat',
-      { chatId, newTitle: title },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    .put<{ data: Chat }>('/chats/editchat', { chatId, newTitle: title })
     .then((res) => res.data.data);
 };
 
@@ -89,27 +65,17 @@ export interface ChatTradeResponse {
 }
 
 export const buyChatToken = async (
-  request: ChatBuyRequest,
-  token: string
+  request: ChatBuyRequest
 ): Promise<ChatTradeResponse> => {
   return instance
-    .post<ChatTradeResponse>('/buy', request, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    .post<ChatTradeResponse>('/buy', request)
     .then((res) => res.data);
 };
 
 export const sellChatToken = async (
-  request: ChatSellRequest,
-  token: string
+  request: ChatSellRequest
 ): Promise<ChatTradeResponse> => {
   return instance
-    .post<ChatTradeResponse>('/sell', request, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    .post<ChatTradeResponse>('/sell', request)
     .then((res) => res.data);
 };

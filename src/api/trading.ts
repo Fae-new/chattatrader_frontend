@@ -20,28 +20,16 @@ export interface TradeResponse {
   };
 }
 
-export const buyToken = async (
-  request: BuyRequest,
-  token: string
-): Promise<TradeResponse> => {
+export const buyToken = async (request: BuyRequest): Promise<TradeResponse> => {
   return instance
-    .post<TradeResponse>('/trading/buy', request, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    .post<TradeResponse>('/trading/buy', request)
     .then((res) => res.data);
 };
 
 export const sellToken = async (
-  request: SellRequest,
-  token: string
+  request: SellRequest
 ): Promise<TradeResponse> => {
   return instance
-    .post<TradeResponse>('/trading/sell', request, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    .post<TradeResponse>('/trading/sell', request)
     .then((res) => res.data);
 };

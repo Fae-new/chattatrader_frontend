@@ -8,13 +8,8 @@ export type UserBalanceResponse = {
 };
 
 export const getUserBalance = async (
-  token: string,
   userId: string
 ): Promise<UserBalanceResponse> => {
-  const res = await instance.get(`/balances/getuserbalance?userId=${userId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await instance.get(`/balances/getuserbalance?userId=${userId}`);
   return res.data.data;
 };

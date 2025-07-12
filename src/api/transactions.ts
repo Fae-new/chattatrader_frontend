@@ -11,14 +11,9 @@ type TokenDetailsResponse = {
 };
 
 export const getTransactionHistory = async (
-  token: string,
   userId: string
 ): Promise<Transaction[]> => {
-  const res = await instance.get(`/transactions/history?userId=${userId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await instance.get(`/transactions/history?userId=${userId}`);
   return res.data.data;
 };
 

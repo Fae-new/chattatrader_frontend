@@ -30,7 +30,7 @@ const tableHeaders = [
 
 export default function History() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const { token, user } = useAuth();
+  const { user } = useAuth();
 
   const tableheadStyles =
     'py-2 px-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider';
@@ -38,10 +38,7 @@ export default function History() {
   useEffect(() => {
     const fetchTrades = async () => {
       try {
-        const transactions = await getTransactionHistory(
-          token ?? '',
-          user?.id ?? ''
-        );
+        const transactions = await getTransactionHistory(user?.id ?? '');
         setTransactions(transactions);
         console.log('Response:', transactions);
       } catch (error) {

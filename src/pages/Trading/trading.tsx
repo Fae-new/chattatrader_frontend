@@ -42,7 +42,7 @@ function Modal({
 }
 
 export default function Trading() {
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const [balances, setBalances] = useState<TokenItem[]>([]);
   const [sellModalOpen, setSellModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -67,9 +67,9 @@ export default function Trading() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!token || !user?.id) return;
+        if (!user?.id) return;
 
-        const balanceData = await getUserBalance(token, user.id);
+        const balanceData = await getUserBalance(user.id);
         const allTokens = [
           ...balanceData.base.tokens,
           ...balanceData.sol.tokens,
@@ -80,9 +80,8 @@ export default function Trading() {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
-  }, [token, user?.id]);
+  }, [user?.id]);
 
   // Fetch token info when contract address is entered
   const handleContractAddressChange = async (address: string) => {
@@ -156,13 +155,10 @@ export default function Trading() {
 
     setIsSubmitting(true);
     try {
-      const response = await buyToken(
-        {
-          amountInUsd: buyAmount,
-          tokenAddress: contractAddress,
-        },
-        token || ''
-      );
+      const response = await buyToken({
+        amountInUsd: buyAmount,
+        tokenAddress: contractAddress,
+      });
 
       toast.success(`Bought $${buyAmount} worth of ${tokenInfo.token.symbol}`);
 
@@ -186,13 +182,10 @@ export default function Trading() {
 
     setIsSubmitting(true);
     try {
-      const response = await sellToken(
-        {
-          percentage: sellPercentage,
-          tokenAddress: selectedToken.address,
-        },
-        token || ''
-      );
+      const response = await sellToken({
+        percentage: sellPercentage,
+        tokenAddress: selectedToken.address,
+      });
 
       const tokensToSell =
         (selectedToken.balance * parseFloat(sellPercentage)) / 100;

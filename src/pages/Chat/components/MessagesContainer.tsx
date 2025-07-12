@@ -8,16 +8,16 @@ interface MessagesContainerProps {
   messages: Message[];
   audioBlob: Blob | null;
   onSendAudio: () => void;
+  onDeleteAudio?: () => void; // Optional delete audio handler
   chatId?: string;
-  token?: string;
 }
 
 export const MessagesContainer: React.FC<MessagesContainerProps> = ({
   messages,
   audioBlob,
   onSendAudio,
+  onDeleteAudio,
   chatId,
-  token,
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -42,11 +42,14 @@ export const MessagesContainer: React.FC<MessagesContainerProps> = ({
             message={msg}
             index={index}
             chatId={chatId}
-            token={token}
           />
         ))}
         {audioBlob && (
-          <AudioPreview audioBlob={audioBlob} onSend={onSendAudio} />
+          <AudioPreview
+            audioBlob={audioBlob}
+            onSend={onSendAudio}
+            onDelete={onDeleteAudio}
+          />
         )}
       </div>
       <div ref={messagesEndRef} className='h-1' />

@@ -94,12 +94,14 @@ export default function Signup() {
       }
 
       const { username, email, password } = vals;
-      await registerApi({
+      const userData = await registerApi({
         username,
         email,
         password,
         captchaToken: vals.captcha,
       });
+
+      login(userData);
       toast.success('Signup successful!');
       navigate(`/verify-otp?email=${encodeURIComponent(email)}`);
     } catch (e: unknown) {

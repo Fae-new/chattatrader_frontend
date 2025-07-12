@@ -41,8 +41,8 @@ const LandingNav: React.FC = () => {
   return (
     <header className='sticky border-b-[1px] top-0 z-40 w-full bg-white border-gray-200 text-gray-900'>
       <NavigationMenu className='mx-auto'>
-        <NavigationMenuList className='container h-14 px-4 w-screen flex items-center justify-between'>
-          <NavigationMenuItem className='font-bold'>
+        <NavigationMenuList className='container h-14 px-8 w-screen flex items-center justify-between max-w-none'>
+          <NavigationMenuItem className='font-bold flex-shrink-0 ml-0'>
             <a
               rel='noreferrer noopener'
               href='/'
@@ -54,7 +54,7 @@ const LandingNav: React.FC = () => {
           </NavigationMenuItem>
 
           {/* Desktop Navigation */}
-          <NavigationMenuItem className='hidden md:flex items-center gap-6'>
+          <NavigationMenuItem className='hidden md:flex items-center gap-8 ml-auto'>
             {routeList.map(({ href, label }) => (
               <a
                 rel='noreferrer noopener'

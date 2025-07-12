@@ -17,7 +17,8 @@ type SocialConnection = {
 };
 
 const Settings = () => {
-  const [privateKey, setPrivateKey] = useState('');
+  const [ethPrivateKey, setEthPrivateKey] = useState('');
+  const [solPrivateKey, setSolPrivateKey] = useState('');
   const [activeModal, setActiveModal] = useState<
     null | 'verification' | 'sms' | 'email' | 'password' | 'privateKey'
   >(null);
@@ -68,102 +69,123 @@ const Settings = () => {
       </div>
     </div>
   );
-
   return (
-    <div className='w-full max-w-4xl mx-auto p-4 sm:p-6'>
-      <h1 className='text-2xl font-bold text-gray-800 mb-4 md:mb-8 text-center'>
-        Account Settings
-      </h1>
+    <div className='min-h-full bg-gray-50'>
+      <div className='w-full max-w-4xl mx-auto p-4 sm:p-6 pb-8'>
+        <h1 className='text-2xl font-bold text-gray-800 mb-4 md:mb-8 text-center'>
+          Account Settings
+        </h1>
+        {/* Top Section */}
+        <div className='flex flex-col lg:flex-row gap-8 mb-8'>
+          {/* Profile Section */}
+          <ProfileSection />
 
-      {/* Top Section */}
-      <div className='flex flex-col lg:flex-row gap-8 mb-8'>
-        {/* Profile Section */}
-        <ProfileSection />
+          {/* Password Section */}
+          <PasswordSection />
+        </div>{' '}
+        {/* Middle Section */}
+        <div className='flex flex-col lg:flex-row gap-8 mb-8'>
+          <ExportKeys
+            setEthPrivateKey={setEthPrivateKey}
+            setSolPrivateKey={setSolPrivateKey}
+            setActiveModal={() => setActiveModal('privateKey')}
+          />
+          {/* 2FA Section */}
+          <div className='w-full lg:w-1/2 bg-white p-6 rounded-xl shadow-sm'>
+            <div className='flex flex-wrap items-center gap-3 mb-6'>
+              <h2 className='text-base sm:text-xl font-semibold text-gray-800 min-w-0'>
+                Two-Factor Auth
+              </h2>
+              <span className='px-2 py-1 text-xs font-medium bg-orange-100 text-orange-800 rounded-full'>
+                Coming Soon
+              </span>
+            </div>
 
-        {/* Password Section */}
-        <PasswordSection />
-      </div>
+            <div className='space-y-3'>
+              {authOptions.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={option.onClick}
+                  className='w-full text-left border border-gray-200 hover:border-[#007b83]/50 hover:bg-[#007b83]/5 text-gray-700 py-2.5 px-4 rounded-lg transition-colors'
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-      {/* Middle Section */}
-      <div className='flex flex-col lg:flex-row gap-8 mb-8'>
-        <ExportKeys
-          setPrivateKey={setPrivateKey}
-          setActiveModal={() => setActiveModal('privateKey')}
-        />
-        {/* 2FA Section */}
-        <div className='w-full lg:w-1/2 bg-white p-6 rounded-xl shadow-sm'>
+          {/* Private Key Section */}
+        </div>
+        {/* Social Section */}
+        <div className='bg-white p-6 rounded-xl shadow-sm mb-8'>
           <div className='flex flex-wrap items-center gap-3 mb-6'>
             <h2 className='text-base sm:text-xl font-semibold text-gray-800 min-w-0'>
-              Two-Factor Auth
+              Social Connections
             </h2>
             <span className='px-2 py-1 text-xs font-medium bg-orange-100 text-orange-800 rounded-full'>
               Coming Soon
             </span>
           </div>
 
-          <div className='space-y-3'>
-            {authOptions.map((option, index) => (
-              <button
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            {SOCIAL_CONNECTIONS.map((social, index) => (
+              <div
                 key={index}
-                onClick={option.onClick}
-                className='w-full text-left border border-gray-200 hover:border-[#007b83]/50 hover:bg-[#007b83]/5 text-gray-700 py-2.5 px-4 rounded-lg transition-colors'
+                className='flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors'
               >
-                {option.label}
-              </button>
+                <div className='flex items-center gap-3'>
+                  <span className='text-lg'>{social.icon}</span>
+                  <span className='text-gray-700'>{social.name}</span>
+                </div>
+                <div className='w-12 h-6 bg-gray-200 rounded-full relative cursor-not-allowed'>
+                  <div className='w-5 h-5 bg-white absolute left-0.5 top-0.5 rounded-full shadow-sm'></div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
-
-        {/* Private Key Section */}
-      </div>
-
-      {/* Social Section */}
-      <div className='bg-white p-6 rounded-xl shadow-sm'>
-        <div className='flex flex-wrap items-center gap-3 mb-6'>
-          <h2 className='text-base sm:text-xl font-semibold text-gray-800 min-w-0'>
-            Social Connections
-          </h2>
-          <span className='px-2 py-1 text-xs font-medium bg-orange-100 text-orange-800 rounded-full'>
-            Coming Soon
-          </span>
-        </div>
-
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          {SOCIAL_CONNECTIONS.map((social, index) => (
-            <div
-              key={index}
-              className='flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors'
-            >
-              <div className='flex items-center gap-3'>
-                <span className='text-lg'>{social.icon}</span>
-                <span className='text-gray-700'>{social.name}</span>
-              </div>
-              <div className='w-12 h-6 bg-gray-200 rounded-full relative cursor-not-allowed'>
-                <div className='w-5 h-5 bg-white absolute left-0.5 top-0.5 rounded-full shadow-sm'></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
+      </div>{' '}
       {/* Modals */}
       {activeModal === 'privateKey' && (
-        <Modal title='Your Private Key' onClose={() => setActiveModal(null)}>
-          <div className='p-4 bg-gray-50 rounded-lg mb-4'>
-            <div className='flex items-start justify-between gap-4'>
-              <p className='font-mono text-sm break-all bg-white p-3 rounded flex-1'>
-                {privateKey}
-              </p>
-              <CopyButton text={privateKey} />
+        <Modal title='Your Private Keys' onClose={() => setActiveModal(null)}>
+          <div className='space-y-4'>
+            {/* ETH Private Key */}
+            <div>
+              <h4 className='text-sm font-medium text-gray-700 mb-2'>
+                Ethereum Private Key
+              </h4>
+              <div className='p-3 bg-gray-50 rounded-lg'>
+                <div className='flex items-start justify-between gap-3'>
+                  <p className='font-mono text-xs break-all bg-white p-3 rounded flex-1'>
+                    {ethPrivateKey || 'No ETH private key available'}
+                  </p>
+                  <CopyButton text={ethPrivateKey} />
+                </div>
+              </div>
+            </div>
+
+            {/* SOL Private Key */}
+            <div>
+              <h4 className='text-sm font-medium text-gray-700 mb-2'>
+                Solana Private Key
+              </h4>
+              <div className='p-3 bg-gray-50 rounded-lg'>
+                <div className='flex items-start justify-between gap-3'>
+                  <p className='font-mono text-xs break-all bg-white p-3 rounded flex-1'>
+                    {solPrivateKey || 'No SOL private key available'}
+                  </p>
+                  <CopyButton text={solPrivateKey} />
+                </div>
+              </div>
             </div>
           </div>
-          <p className='text-xs text-orange-600'>
-            <strong>Warning:</strong> Keep this key secure. Anyone with this key
-            can access your account.
+
+          <p className='text-xs text-orange-600 mt-4'>
+            <strong>Warning:</strong> Keep these keys secure. Anyone with these
+            keys can access your wallets.
           </p>
         </Modal>
       )}
-
       {/* Other modals would go here */}
     </div>
   );

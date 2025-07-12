@@ -18,7 +18,6 @@ interface ChatPanelProps {
   onClose: () => void;
   onSelectChat: (chatId: string) => void;
   onCreateNewChat: () => void;
-  token: string;
   onChatTitleUpdated: (updatedChat: Chat) => void;
 }
 
@@ -31,7 +30,6 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   onClose,
   onSelectChat,
   onCreateNewChat,
-  token,
   onChatTitleUpdated,
 }) => {
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -55,11 +53,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
     }
     setLoadingId(chat.chatId);
     try {
-      const updated = await updateChatTitle(
-        chat.chatId,
-        editValue.trim(),
-        token
-      );
+      const updated = await updateChatTitle(chat.chatId, editValue.trim());
       onChatTitleUpdated(updated);
       setEditingId(null);
       setEditValue('');
@@ -69,13 +63,12 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       setLoadingId(null);
     }
   };
-
   return (
     <div
       className={`
       fixed top-0 right-0 z-50 h-full w-64 sm:w-72 bg-white/30 backdrop-blur-md p-4 border-l border-gray-200 flex flex-col
       transform transition-transform duration-300 ease-in-out
-      lg:relative lg:translate-x-0
+      lg:relative lg:translate-x-0 lg:w-80 lg:h-full lg:min-h-0
       ${isOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
     `}
     >

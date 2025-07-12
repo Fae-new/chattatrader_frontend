@@ -22,6 +22,25 @@ export default function Home() {
   return (
     <div className='bg-white min-h-screen'>
       <LandingNav />
+
+      {/* Flowing announcement banner */}
+      <div className='bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 overflow-hidden'>
+        <div className='animate-marquee whitespace-nowrap'>
+          <span className='text-sm font-medium mx-4'>
+            📢 Notice: We currently do not have any crypto tokens available at
+            this time. Stay tuned for updates!
+          </span>
+          <span className='text-sm font-medium mx-4'>
+            📢 Notice: We currently do not have any crypto tokens available at
+            this time. Stay tuned for updates!
+          </span>
+          <span className='text-sm font-medium mx-4'>
+            📢 Notice: We currently do not have any crypto tokens available at
+            this time. Stay tuned for updates!
+          </span>
+        </div>
+      </div>
+
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <main className='space-y-8'>
           <Hero />

@@ -218,7 +218,6 @@ const Discover: React.FC = () => {
           ))}
         </Tabs>
       </div>
-
       {/* Modals */}
       {showTradeModal && tradeAction && (
         <Modal
@@ -280,10 +279,10 @@ const Discover: React.FC = () => {
             </div>
           </div>
         </Modal>
-      )}
+      )}{' '}
       {showTradeModal && !tradeAction && (
         <Modal onClose={() => setShowTradeModal(null)}>
-          <div className='flex gap-4 animate-slide-up justify-center'>
+          <div className='flex gap-4 justify-center'>
             <Button
               className='bg-[#007b83] hover:bg-[#007b83]/90 text-white w-full md:w-[93px] md:[29px] transition-colors'
               onClick={() => setTradeAction('buy')}

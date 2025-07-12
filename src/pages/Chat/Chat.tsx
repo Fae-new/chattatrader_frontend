@@ -22,8 +22,7 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(true); // Loading for initial chats fetch
   const [chatLoading, setChatLoading] = useState(false); // Loading for individual chat selection
   const [messages, setMessages] = useState<Message[]>([]);
-  const { user, token } = useAuth();
-
+  const { user } = useAuth();
   const { isRecording, audioBlob, startRecording, stopRecording, clearAudio } =
     useAudioRecording();
 
@@ -32,13 +31,11 @@ export default function ChatPage() {
   }, []);
 
   const socket = useSocket(handleSocketMessage);
-
   const createNewChat = useCallback(async () => {
     try {
       setChatLoading(true);
       const newChat = await CreateChatRequest({
         userId: user?.id || 'guest',
-        token: token || '',
       });
       setChats((prev) => [newChat, ...prev]);
       setCurrentChat(newChat);
@@ -48,7 +45,7 @@ export default function ChatPage() {
     } finally {
       setChatLoading(false);
     }
-  }, [user?.id, token]);
+  }, [user?.id]);
 
   // Initial chats fetch
   useEffect(() => {
@@ -166,18 +163,17 @@ export default function ChatPage() {
       </div>
     );
   }
-
   return (
-    <>
+    <div className='h-full flex flex-col'>
       <button
         className='lg:hidden top-2 right-2 mb-4 fixed p-2 bg-[#007b83] text-white rounded hover:bg-cyan-700 z-10 cursor-pointer'
         onClick={() => setIsChatsOpen(!isChatsOpen)}
       >
         <FaComments size={20} />
       </button>{' '}
-      <div className='flex flex-col overflow-hidden h-screen'>
+      <div className='flex h-full'>
         {/* Chat Area - Left */}
-        <div className='flex-1 flex flex-col bg-white/20 backdrop-blur-md relative'>
+        <div className='flex-1 flex flex-col bg-white/20 backdrop-blur-md relative min-h-0'>
           {chats.length === 0 ? (
             <EmptyState onCreateNewChat={createNewChat} />
           ) : (
@@ -190,7 +186,7 @@ export default function ChatPage() {
               </div>
 
               {/* Messages Container with individual chat loading */}
-              <div className='flex-1 overflow-hidden flex flex-col'>
+              <div className='flex-1 overflow-hidden flex flex-col min-h-0'>
                 {chatLoading ? (
                   <div className='flex-1 flex items-center justify-center'>
                     <Loader />
@@ -200,8 +196,8 @@ export default function ChatPage() {
                     messages={messages}
                     audioBlob={audioBlob}
                     onSendAudio={handleSendAudio}
+                    onDeleteAudio={clearAudio}
                     chatId={currentChat?.chatId}
-                    token={token || undefined}
                   />
                 )}
               </div>
@@ -228,10 +224,9 @@ export default function ChatPage() {
           onClose={() => setIsChatsOpen(false)}
           onSelectChat={handleSelectChat}
           onCreateNewChat={createNewChat}
-          token={token || ''}
           onChatTitleUpdated={handleChatTitleUpdated}
         />
       </div>
-    </>
+    </div>
   );
 }

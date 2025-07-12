@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as Yup from 'yup';
 import { useNavigate, Navigate } from 'react-router-dom';
-import { verifyCode, requestCode } from '../../api/auth';
+import { verifyCode, requestCode, getUserWithToken } from '../../api/auth';
+import { useAuth } from '../../context/AuthContext';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { Card, CardContent } from '../../reuseables/Card';
 import {
@@ -23,10 +24,29 @@ const otpValidationSchema = Yup.object({
 
 const VerifyOtp: React.FC = () => {
   const navigate = useNavigate();
-  const email = new URLSearchParams(window.location.search).get('email');
+  const { login, user } = useAuth();
+  const email = user?.email;
   const [error, setError] = useState<string>('');
   const [isResending, setIsResending] = useState<boolean>(false);
   const otpSentRef = useRef(false);
+  const handleVerifySubmit = async (
+    values: { otp: string },
+    { setSubmitting }: any
+  ) => {
+    setError('');
+    try {
+      await verifyCode({ code: values.otp, email: email! });
+
+      const userData = await getUserWithToken();
+      login(userData);
+
+      navigate('/app/discover');
+    } catch (err: unknown) {
+      console.error(err);
+      setError('Failed to verify code. Please try again.');
+    }
+    setSubmitting(false);
+  };
 
   useEffect(() => {
     if (email && !otpSentRef.current) {
@@ -42,7 +62,7 @@ const VerifyOtp: React.FC = () => {
   }, [email]);
 
   if (!email) {
-    return <Navigate to='/signup' replace />;
+    return <Navigate to='/sign-up' replace />;
   }
 
   const handleResendOTP = async () => {
@@ -79,21 +99,11 @@ const VerifyOtp: React.FC = () => {
                 <div className='text-red-500 text-sm text-center mb-3'>
                   {error}
                 </div>
-              )}
+              )}{' '}
               <Formik
                 initialValues={{ otp: '' }}
                 validationSchema={otpValidationSchema}
-                onSubmit={async (values, { setSubmitting }) => {
-                  setError('');
-                  try {
-                    await verifyCode({ code: values.otp, email });
-                    navigate('/app/discover');
-                  } catch (err: unknown) {
-                    console.error(err);
-                    setError('Failed to verify code. Please try again.');
-                  }
-                  setSubmitting(false);
-                }}
+                onSubmit={handleVerifySubmit}
               >
                 {({
                   values,
@@ -106,7 +116,8 @@ const VerifyOtp: React.FC = () => {
                     <div className='space-y-2'>
                       <div className='text-left'>
                         <Label htmlFor='otp'>Verification Code</Label>
-                      </div>                      <div className='flex justify-center items-center'>
+                      </div>{' '}
+                      <div className='flex justify-center items-center'>
                         <InputOTP
                           maxLength={6}
                           value={values.otp}
